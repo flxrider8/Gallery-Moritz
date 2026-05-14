@@ -620,6 +620,44 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 <div class="toast" id="toast">Gespeichert</div>
 
 <script>
+
+// ── GITHUB KONFIGURATION ──
+const GITHUB_CONFIG = {
+  owner: 'flxrider8',
+  repo: 'Gallery-Moritz',
+  path: 'portfolio' // Der Ordner, in den die Bilder geschoben werden
+};
+
+
+async function fetchPaintingsFromGitHub() {
+  const { owner, repo, path } = GITHUB_CONFIG;
+  try {
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+    if (!response.ok) throw new Error('Ordner nicht gefunden oder leer');
+    const files = await response.json();
+    
+    // Wir verwandeln die Dateien in das Format, das dein Code versteht
+    paintings = files
+      .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+      .map((file, idx) => ({
+        id: idx + 100,
+        title: file.name.split('.')[0].replace(/[_-]/g, ' '), // Nutzt Dateinamen als Titel
+        year: '-', 
+        description: '',
+        frame: 'frame-ornate-gold', // Standard-Rahmen
+        imageData: file.download_url
+      }));
+      
+    renderGallery();
+  } catch (err) {
+    console.error("Fehler beim Laden von GitHub:", err);
+    // Fallback falls der Ordner leer/nicht da ist
+    paintings = getDefaults();
+    renderGallery();
+  }
+}
+
+
 // ───────────────────────────────────────────────
 // CONSTANTS
 // ───────────────────────────────────────────────
@@ -1026,14 +1064,17 @@ document.getElementById('add-btn').onclick=()=>{
 // ───────────────────────────────────────────────
 // INIT
 // ───────────────────────────────────────────────
-function init(){
-  const ok=load();
-  if(!ok||paintings.length===0){ paintings=getDefaults(); nextId=20; save(); }
+
+async function init(){
+  load(); // Lade allgemeine Einstellungen (Name, Texte)
   applySettings();
-  renderGallery();
   initParticles();
   bindSettings();
+  
+  // Lade Bilder von GitHub
+  await fetchPaintingsFromGitHub();
 }
+
 // ───────────────────────────────────────────────
 // MOBILE NAV
 // ───────────────────────────────────────────────
