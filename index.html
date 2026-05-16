@@ -457,6 +457,17 @@ window.onscroll = () => document.getElementById('main-nav').classList.toggle('sc
 document.getElementById('year-now').textContent = new Date().getFullYear();
 initParticles();
 fetchPaintings();
+// Sorgt dafür, dass man das Künstler-Bild anklicken und vergrößern kann
+document.getElementById('artist-img').onclick = function() {
+  // Nur öffnen, wenn auch wirklich ein Bild geladen ist (nicht beim Platzhalter)
+  if (this.src && !this.src.endsWith('#') && this.style.display !== 'none') {
+    document.getElementById('lb-img').src = this.src;
+    document.getElementById('lb-title').textContent = "Moritz"; // Der Titel in der Großansicht
+    document.getElementById('lightbox').classList.add('open');
+  }
+};
+// Macht den Mauszeiger über dem Künstlerbild zu einer Lupe/Hand, damit man sieht, dass es anklickbar ist
+document.getElementById('artist-img').style.cursor = 'pointer';
 // ── MOBILE NAV ──
 (function(){
   const burger  = document.getElementById('nav-hamburger');
