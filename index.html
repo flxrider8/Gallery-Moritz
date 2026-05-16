@@ -266,7 +266,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 <body>
 
 <nav id="main-nav">
-  <div class="nav-logo">ATELIER</div>
+  <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'}); setTimeout(() => { history.pushState('', document.title, window.location.pathname + window.location.search); }, 400);">ATELIER</div>
   <ul class="nav-links">
     <li><a href="#about">Künstler</a></li>
     <li><a href="#contact">Kontakt</a></li>
