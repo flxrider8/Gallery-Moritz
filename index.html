@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atelier — Kunstgalerie</title>
 <meta name="description" content="Fine Art Gallery von Moritz Geberth. Entdecken Sie ausgewählte, zeitlose Kunstwerke in Öl und Acryl sowie moderne zeitlose Ästhetik.">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/flxrider8/Gallery-Moritz/main/portfolio/apple-touch-icon.png">
 <meta property="og:title" content="Moritz Atelier — Fine Art Gallery">
 <meta property="og:description" content="Zeitlose Kunst & Ästhetik. Gemälde von Moritz Geberth — Öl & Acryl.">
 <meta property="og:type" content="website">
@@ -477,7 +477,7 @@ async function fetchPaintings() {
     const files = await res.json();
 
     // Auto-load artist.jpg ins Portrait
-    const artistFile  = files.find(f => f.name.toLowerCase() === 'artist.jpg');
+    const artistFile  = files.find(f => !['artist.jpg','apple-touch-icon.png'].includes(f.name.toLowerCase())
     const artistImg   = document.getElementById('artist-img');
     const placeholder = document.querySelector('.artist-portrait-placeholder');
     if (artistFile && artistImg) {
