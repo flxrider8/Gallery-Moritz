@@ -105,7 +105,24 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 
 .p-wrapper { position:relative; display:block; cursor:pointer; }
 .p-img-box { position:relative; overflow:hidden; aspect-ratio:4/3; }
-.p-img-box img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94); }
+.p-img-box img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.5s; opacity:0; }
+.p-img-box img.loaded { opacity:1; }
+.p-img-box::before {
+  content:''; position:absolute; inset:0; z-index:1;
+  background: var(--surface2);
+}
+.p-img-box::after {
+  content:''; position:absolute;
+  top:50%; left:50%; z-index:2;
+  width:36px; height:36px;
+  margin:-18px 0 0 -18px;
+  border:2px solid rgba(200,169,81,0.15);
+  border-top:2px solid var(--gold);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+.p-img-box.img-loaded::before { display:none; }
+.p-img-box.img-loaded::after { display:none; }
 .p-wrapper:hover .p-img-box img { transform:scale(1.045); }
 .p-spot { position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity 0.25s; z-index:1; background:radial-gradient(circle 200px at 50% 50%,rgba(255,255,200,0.14),transparent 70%); }
 .p-wrapper:hover .p-spot { opacity:1; }
@@ -215,6 +232,133 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .lightbox.open .lb-content { transform:scale(1); }
 .lb-content img { max-width:100%; max-height:72vh; object-fit:contain; border: 2px solid var(--gold); }
 .lb-title { font-size:1.55rem; font-style:italic; letter-spacing:0.05em; color:var(--text); }
+
+/* INFO PANEL (Bottom Sheet) */
+.info-panel {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 600;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  max-height: 92vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.info-panel.open { transform: translateY(0); }
+.info-panel-backdrop {
+  position: fixed; inset: 0; z-index: 599;
+  background: rgba(7,7,6,0.7);
+  backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.info-panel-backdrop.open { opacity: 1; pointer-events: all; }
+
+.info-panel-handle {
+  width: 36px; height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 1rem auto 0;
+}
+.info-panel-img-wrap {
+  width: 100%; aspect-ratio: 4/3;
+  overflow: hidden; position: relative;
+}
+.info-panel-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block;
+  border: 10px solid var(--gold);
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 2px var(--gold-d), inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--gold-d);
+}
+.info-panel-body { padding: 1.8rem 1.8rem 3rem; }
+
+.info-panel-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.7rem;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s 0.2s, transform 0.4s 0.2s;
+}
+.info-panel.open .info-panel-eyebrow { opacity: 1; transform: translateY(0); }
+
+.info-panel-title {
+  font-size: 2rem; font-weight: 300; font-style: italic;
+  color: var(--text); letter-spacing: 0.02em; line-height: 1.1;
+  margin-bottom: 0.4rem;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.4s 0.28s, transform 0.4s 0.28s;
+}
+.info-panel.open .info-panel-title { opacity: 1; transform: translateY(0); }
+
+.info-panel-divider {
+  width: 40px; height: 1px; background: var(--gold);
+  opacity: 0; margin: 1rem 0;
+  transition: opacity 0.4s 0.35s, width 0.5s 0.35s;
+}
+.info-panel.open .info-panel-divider { opacity: 0.6; width: 55px; }
+
+.info-panel-desc {
+  font-size: 0.92rem; color: var(--muted);
+  letter-spacing: 0.03em; line-height: 1.9;
+  margin-bottom: 0.5rem;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s 0.38s, transform 0.4s 0.38s;
+}
+.info-panel.open .info-panel-desc { opacity: 1; transform: translateY(0); }
+
+.info-panel-price {
+  font-size: 1.6rem; font-weight: 300;
+  color: var(--gold-l); letter-spacing: 0.05em;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 1.8rem;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s 0.44s, transform 0.4s 0.44s;
+}
+.info-panel.open .info-panel-price { opacity: 1; transform: translateY(0); }
+.info-panel-price.sold { color: var(--muted); text-decoration: line-through; opacity: 0.5 !important; }
+
+.info-panel-sold-note {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem; letter-spacing: 0.4em;
+  color: var(--muted); text-transform: uppercase;
+  border: 1px solid var(--border); display: inline-block;
+  padding: 0.4rem 1rem; margin-bottom: 1.8rem;
+  opacity: 0; transition: opacity 0.4s 0.5s;
+}
+.info-panel.open .info-panel-sold-note { opacity: 1; }
+
+.info-panel-btn {
+  display: block; width: 100%; padding: 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--black); background: var(--gold);
+  border: none; text-decoration: none; text-align: center;
+  cursor: pointer;
+  transition: background 0.3s;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s 0.5s, transform 0.4s 0.5s, background 0.3s;
+}
+.info-panel.open .info-panel-btn { opacity: 1; transform: translateY(0); }
+.info-panel-btn:hover { background: var(--gold-l); }
+
+.info-panel-expand {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  margin-top: 1rem;
+  font-family: 'Cinzel', serif; font-size: 0.55rem;
+  letter-spacing: 0.35em; color: var(--muted); text-transform: uppercase;
+  cursor: pointer; background: none; border: none; width: 100%;
+  padding: 0.5rem; transition: color 0.3s;
+  opacity: 0; transition: opacity 0.4s 0.55s, color 0.3s;
+}
+.info-panel.open .info-panel-expand { opacity: 1; }
+.info-panel-expand:hover { color: var(--gold); }
+
+@media(min-width: 769px) {
+  .info-panel { display: none; } /* Nur auf Mobile */
+  .info-panel-backdrop { display: none; }
+}
 
 /* HAMBURGER */
 .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; z-index: 300; min-width:44px; min-height:44px; justify-content:center; align-items:center; padding:10px; }
@@ -464,6 +608,25 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   </div>
 </div>
 
+<!-- INFO PANEL (Mobile Bottom Sheet) -->
+<div class="info-panel-backdrop" id="info-backdrop"></div>
+<div class="info-panel" id="info-panel">
+  <div class="info-panel-handle"></div>
+  <div class="info-panel-img-wrap">
+    <img id="info-img" src="" alt="">
+  </div>
+  <div class="info-panel-body">
+    <div class="info-panel-eyebrow" id="info-eyebrow"></div>
+    <div class="info-panel-title" id="info-title"></div>
+    <div class="info-panel-divider"></div>
+    <div class="info-panel-desc" id="info-desc"></div>
+    <div class="info-panel-price" id="info-price"></div>
+    <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
+    <a class="info-panel-btn" id="info-btn" href="#">Anfragen</a>
+    <button class="info-panel-expand" onclick="closeInfoPanel()">✕ &nbsp; Schließen</button>
+  </div>
+</div>
+
 <!-- ARTIST LIGHTBOX (ohne Pfeile, separat) -->
 <div class="lightbox" id="artist-lightbox">
   <div class="lb-bg" id="artist-lb-bg"></div>
@@ -539,7 +702,7 @@ async function fetchPaintings() {
       const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Anfragen</a>` : '';
       card.innerHTML = `
         <div class="p-wrapper">
-          <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy"><div class="p-spot"></div></div>
+          <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded')"><div class="p-spot"></div></div>
           <div class="p-info">
             <div class="p-meta"><div class="p-title">${title}</div>${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}</div>
             <div class="p-desc">${desc}</div>
@@ -547,8 +710,11 @@ async function fetchPaintings() {
           </div>
         </div>`;
       
-      // Nutzt jetzt den Index zur Steuerung der Lightbox
-      card.onclick = () => openLightboxAtIndex(index);
+      // Mobile: Info Panel / Desktop: Lightbox
+      card.onclick = () => {
+        if (window.innerWidth <= 768) openInfoPanel(index);
+        else openLightboxAtIndex(index);
+      };
       
       grid.appendChild(card);
       new IntersectionObserver(entries => {
@@ -639,6 +805,59 @@ document.getElementById('artist-lb-close').onclick = () => {
   document.getElementById('artist-lightbox').classList.remove('open');
   document.body.style.overflow = '';
 };
+
+// ── INFO PANEL ──
+function openInfoPanel(index) {
+  if (index < 0 || index >= allPaintingsData.length) return;
+  const file = allPaintingsData[index];
+  let base = file.name.replace(/\.[^/.]+$/, '');
+  const sold = /^VERKAUFT\s*-\s*/i.test(base);
+  if (sold) base = base.replace(/^VERKAUFT\s*-\s*/i, '');
+  const parts = base.split(' - ');
+  let price = '', title = base, desc = '';
+  if (parts.length === 3) { price = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
+  else if (parts.length === 2) { price = parts[0].trim(); title = parts[1].trim(); }
+  const priceDisplay = price ? (price.includes('€') || price.toLowerCase().includes('euro') ? price : price + ' €') : '';
+
+  // Panel zurücksetzen für Animation
+  const panel = document.getElementById('info-panel');
+  panel.classList.remove('open');
+
+  document.getElementById('info-img').src = file.download_url;
+  document.getElementById('info-eyebrow').textContent = desc || 'Kunstwerk';
+  document.getElementById('info-title').textContent = title;
+  document.getElementById('info-desc').textContent = desc;
+
+  const priceEl = document.getElementById('info-price');
+  priceEl.textContent = priceDisplay;
+  priceEl.className = 'info-panel-price' + (sold ? ' sold' : '');
+
+  const soldNote = document.getElementById('info-sold');
+  soldNote.style.display = sold ? 'inline-block' : 'none';
+
+  const btn = document.getElementById('info-btn');
+  if (sold) {
+    btn.style.display = 'none';
+  } else {
+    btn.style.display = 'block';
+    btn.href = `mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen`;
+    btn.onclick = e => e.stopPropagation();
+  }
+
+  requestAnimationFrame(() => {
+    document.getElementById('info-backdrop').classList.add('open');
+    panel.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+function closeInfoPanel() {
+  document.getElementById('info-panel').classList.remove('open');
+  document.getElementById('info-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('info-backdrop').onclick = closeInfoPanel;
 
 // ── MOBILE NAV ──
 (function(){
