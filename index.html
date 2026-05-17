@@ -761,9 +761,20 @@ function openLightboxAtIndex(index) {
 }
 
 // Gemeinsame Schließen-Funktion für die Lightbox
+let openedFromInfoPanel = false;
+
 const closeLightbox = () => {
   document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = ''; // Aktiviert das Scrollen wieder
+  if (openedFromInfoPanel) {
+    openedFromInfoPanel = false;
+    setTimeout(() => {
+      document.getElementById('info-panel').classList.add('open');
+      document.getElementById('info-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }, 200);
+  } else {
+    document.body.style.overflow = '';
+  }
 };
 
 document.getElementById('lb-close').onclick = closeLightbox;
@@ -875,14 +886,17 @@ document.getElementById('info-backdrop').onclick = closeInfoPanel;
 document.getElementById('info-img-wrap').onclick = function() {
   const img = document.getElementById('info-img');
   if (!img.src) return;
-  closeInfoPanel();
+  openedFromInfoPanel = true;
+  // Panel unsichtbar im Hintergrund lassen, Lightbox drüber öffnen
+  document.getElementById('info-panel').classList.remove('open');
+  document.getElementById('info-backdrop').classList.remove('open');
   setTimeout(() => {
     document.getElementById('lb-img').src = img.src;
     document.getElementById('lb-title').textContent = document.getElementById('info-title').textContent;
     document.getElementById('lb-counter').textContent = '';
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
-  }, 350);
+  }, 200);
 };
 
 // ── MOBILE NAV ──
