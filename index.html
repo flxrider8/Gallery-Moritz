@@ -555,10 +555,17 @@ function openLightboxAtIndex(index) {
   document.getElementById('lb-img').src = file.download_url;
   document.getElementById('lb-title').textContent = title;
   document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden'; // Verhindert das Scrollen im Hintergrund
 }
 
-document.querySelector('.lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
-document.querySelector('.lb-bg').onclick = () => document.getElementById('lightbox').classList.remove('open');
+// Gemeinsame Schließen-Funktion für die Lightbox
+const closeLightbox = () => {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = ''; // Aktiviert das Scrollen wieder
+};
+
+document.querySelector('.lb-close').onclick = closeLightbox;
+document.querySelector('.lb-bg').onclick = closeLightbox;
 
 // Klick-Events für Desktop-Pfeile
 document.getElementById('lb-prev').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex - 1); };
@@ -598,6 +605,7 @@ document.getElementById('artist-img').onclick = function() {
     document.getElementById('lb-img').src = this.src;
     document.getElementById('lb-title').textContent = "Moritz"; 
     document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 };
 
@@ -630,7 +638,7 @@ document.addEventListener('keydown', function(event) {
     // Lightbox schließen
     const lightbox = document.getElementById('lightbox');
     if (lightbox && lightbox.classList.contains('open')) {
-      lightbox.classList.remove('open');
+      closeLightbox();
     }
     
     // Impressum-Modal schließen
@@ -651,25 +659,39 @@ document.addEventListener('keydown', function(event) {
 
 // ── TOUCH-GESTEN (WISCHEN AM HANDY) ──
 let touchStartX = 0;
+let touchStartY = 0;
 let touchEndX = 0;
 const lbContent = document.querySelector('.lb-content');
 
 if (lbContent) {
   lbContent.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
+
+  // Blockiert das native Herunterscrollen der Seite beim Wisch-Vorgang
+  lbContent.addEventListener('touchmove', e => {
+    e.preventDefault();
+  }, { passive: false });
 
   lbContent.addEventListener('touchend', e => {
     touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
     const swipeThreshold = 50; // Mindestdistanz für Swipe
     
-    // Nach links wischen -> Nächstes Bild
-    if (touchEndX < touchStartX - swipeThreshold) {
-      openLightboxAtIndex(currentPaintingIndex + 1);
-    }
-    // Nach rechts wischen -> Vorheriges Bild
-    if (touchEndX > touchStartX + swipeThreshold) {
-      openLightboxAtIndex(currentPaintingIndex - 1);
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Nur wischen, wenn die Bewegung primär horizontal war (verhindert unsauberes Springen)
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Nach links wischen -> Nächstes Bild
+      if (diffX < -swipeThreshold) {
+        openLightboxAtIndex(currentPaintingIndex + 1);
+      }
+      // Nach rechts wischen -> Vorheriges Bild
+      if (diffX > swipeThreshold) {
+        openLightboxAtIndex(currentPaintingIndex - 1);
+      }
     }
   }, { passive: true });
 }
