@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atelier — Kunstgalerie</title>
 <meta name="description" content="Fine Art Gallery von Moritz Geberth. Entdecken Sie ausgewählte, zeitlose Kunstwerke in Öl und Acryl sowie moderne zeitlose Ästhetik.">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/flxrider8/Gallery-Moritz/main/portfolio/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23070706'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23c8a951' font-family='serif' font-weight='bold' font-size='110'%3EM%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Moritz Atelier — Fine Art Gallery">
 <meta property="og:description" content="Zeitlose Kunst & Ästhetik. Gemälde von Moritz Geberth — Öl & Acryl.">
 <meta property="og:type" content="website">
@@ -391,9 +391,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
       </div>
     </div>
     <div class="artist-text-col">
-      <div class="about-text">Willkommen im Atelier von Moritz Geberth.<br><br>
-Kunst begleitet mich schon mein ganzes Leben. Seit einem halben Jahr bringe ich meine Gedanken und Gefühle mit Farbe auf Leinwand und entwickle dabei meinen eigenen Stil.<br><br>
-Mit meinen Werken möchte ich Menschen inspirieren, selbst kreativ zu werden und Kunst als Ausdruck ihrer eigenen Ideen zu entdecken.</div>
+      <div class="about-text">Hallo ich bin Moritz Geberth, 17 Jahre alt und mache schon mein ganzes Leben gerne Kunst. Seit einem halben Jahr versuche ich meine Gedanken mit Farbe auf Leinwände zu bringen. Ich will andere Menschen mit meinen Werken dazu motivieren, auch selbst Kunst zu kreieren.</div>
     </div>
   </div>
 </section>
@@ -477,7 +475,7 @@ async function fetchPaintings() {
     const files = await res.json();
 
     // Auto-load artist.jpg ins Portrait
-    const artistFile  = files.find(f => !['artist.jpg','apple-touch-icon.png'].includes(f.name.toLowerCase())
+    const artistFile  = files.find(f => f.name.toLowerCase() === 'artist.jpg');
     const artistImg   = document.getElementById('artist-img');
     const placeholder = document.querySelector('.artist-portrait-placeholder');
     if (artistFile && artistImg) {
@@ -702,8 +700,6 @@ if (lbContent) {
     lbContent.style.opacity = '1';
   }, { passive: true });
 }
-
 </script>
 </body>
-  
 </html>
