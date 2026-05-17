@@ -682,34 +682,34 @@ document.addEventListener('keydown', function(event) {
 
 // ── TOUCH-GESTEN (WISCHEN AM HANDY MIT SMOOTHEM ÜBERGANG) ──
 let touchStartX = 0;
-const lbContent = document.querySelector('.lb-content');
+let touchStartY = 0;
+const lbContent = document.getElementById('lightbox').querySelector('.lb-content');
 
 if (lbContent) {
   lbContent.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
 
   lbContent.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
 
   lbContent.addEventListener('touchend', e => {
     const touchEndX = e.changedTouches[0].screenX;
-    const swipeThreshold = 60;
+    const touchEndY = e.changedTouches[0].screenY;
     const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
 
-    if (Math.abs(diffX) > swipeThreshold) {
+    // Nur horizontales Wischen — vertikales ignorieren
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
       const nextIndex = diffX < 0 ? currentPaintingIndex + 1 : currentPaintingIndex - 1;
       
       if (nextIndex >= 0 && nextIndex < allPaintingsData.length) {
-        // 1. Aktuelles Bild ausfaden und leicht in Wischrichtung verschieben
         lbContent.style.opacity = '0';
         lbContent.style.transform = `translateX(${diffX < 0 ? '-30px' : '30px'})`;
         
         setTimeout(() => {
-          // 2. Bild wechseln und auf der Gegenseite unsichtbar positionieren
           openLightboxAtIndex(nextIndex);
           lbContent.style.transform = `translateX(${diffX < 0 ? '30px' : '-30px'})`;
-          
-          // 3. Neues Bild sanft in die Mitte einfahren lassen
           setTimeout(() => {
             lbContent.style.opacity = '1';
             lbContent.style.transform = 'translateX(0)';
@@ -718,7 +718,6 @@ if (lbContent) {
         return;
       }
     }
-    // Zurücksetzen, falls der Swipe zu kurz war
     lbContent.style.transform = 'translateX(0)';
     lbContent.style.opacity = '1';
   }, { passive: true });
