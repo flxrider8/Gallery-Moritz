@@ -7,9 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atelier — Kunstgalerie</title>
 <meta name="description" content="Fine Art Gallery von Moritz Geberth. Entdecken Sie ausgewählte, zeitlose Kunstwerke in Öl und Acryl sowie moderne zeitlose Ästhetik.">
-<!-- Apple Touch Icon -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23070706'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23c8a951' font-family='serif' font-weight='bold' font-size='110'%3EM%3C/text%3E%3C/svg%3E">
-<!-- Open Graph -->
 <meta property="og:title" content="Moritz Atelier — Fine Art Gallery">
 <meta property="og:description" content="Zeitlose Kunst & Ästhetik. Gemälde von Moritz Geberth — Öl & Acryl.">
 <meta property="og:type" content="website">
@@ -256,8 +254,34 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
+/* ── LIGHTBOX PFEILE ── */
+.lb-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: 1px solid var(--border); color: var(--gold);
+  width: 50px; height: 50px; cursor: pointer; font-size: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease; z-index: 710; user-select: none;
+}
+.lb-arrow:hover { border-color: var(--gold-l); color: var(--gold-l); background: rgba(20,19,16,0.5); }
+.lb-prev { left: 2rem; }
+.lb-next { right: 2rem; }
+
+/* ── LADE SPINNER ── */
+.gallery-loader {
+  grid-column: 1 / -1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1rem; padding: 4rem 0;
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(200,169,81,0.1); border-top: 3px solid var(--gold);
+  border-radius: 50%; animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.loader-text { font-size: 0.9rem; letter-spacing: 0.2em; color: var(--muted); font-style: italic; }
+
 /* ── RESPONSIVE 768px ── */
 @media(max-width: 768px){
+  .lb-arrow { display: none; } /* Am Handy wird gewischt, Pfeile verstecken */
   nav { padding: 1.2rem 1.5rem; padding-top: calc(env(safe-area-inset-top, 0px) + 1.2rem); background: #070706; border-bottom: none; margin-top: calc(-1 * env(safe-area-inset-top, 0px)); }
   nav.scrolled { padding: 0.9rem 1.5rem; padding-top: calc(env(safe-area-inset-top, 0px) + 0.9rem); background: #070706; border-bottom: 1px solid var(--border); margin-top: calc(-1 * env(safe-area-inset-top, 0px)); }
   .nav-links { display: none; }
@@ -319,7 +343,6 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   </button>
 </nav>
 
-<!-- Mobile overlay + drawer -->
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="nav-drawer" id="nav-drawer">
   <a href="#about" class="drawer-link">Künstler</a>
@@ -346,7 +369,12 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 </section>
 
 <div class="gallery-wrap">
-  <div class="gallery-grid" id="gallery-grid"></div>
+  <div class="gallery-grid" id="gallery-grid">
+    <div class="gallery-loader" id="gallery-loader">
+      <div class="spinner"></div>
+      <div class="loader-text">Kollektion wird geladen...</div>
+    </div>
+  </div>
 </div>
 
 <section class="artist-sec" id="about">
@@ -410,7 +438,6 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   <a href="#" onclick="document.getElementById('impressum-modal').style.display='flex';return false;" style="font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);text-decoration:none;text-transform:uppercase;font-family:'Cinzel',serif;">Impressum</a>
 </footer>
 
-<!-- IMPRESSUM MODAL -->
 <div id="impressum-modal" style="display:none;position:fixed;inset:0;z-index:800;align-items:center;justify-content:center;">
   <div onclick="document.getElementById('impressum-modal').style.display='none'" style="position:absolute;inset:0;background:rgba(7,7,6,0.92);backdrop-filter:blur(10px);cursor:pointer;"></div>
   <div style="position:relative;z-index:1;background:var(--surface);border:1px solid var(--border);padding:3rem;max-width:480px;width:90%;font-family:'Cormorant Garamond',serif;">
@@ -429,6 +456,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 <div class="lightbox" id="lightbox">
   <div class="lb-bg"></div>
   <button class="lb-close">✕</button>
+  <button class="lb-arrow lb-prev" id="lb-prev">‹</button>
+  <button class="lb-arrow lb-next" id="lb-next">›</button>
   <div class="lb-content">
     <img id="lb-img" src="">
     <div class="lb-title" id="lb-title"></div>
@@ -437,6 +466,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 
 <script>
 const GITHUB_CONFIG = { owner: 'flxrider8', repo: 'Gallery-Moritz', path: 'portfolio' };
+let allPaintingsData = []; // Speichert alle Werke für Vor-/Zurück
+let currentPaintingIndex = -1; // Merkt sich das aktuell geöffnete Bild
 
 async function fetchPaintings() {
   try {
@@ -456,47 +487,82 @@ async function fetchPaintings() {
       if (placeholder) placeholder.style.display = 'flex';
     }
 
-    // Galerie — artist.jpg ausschließen, "Jahr - Beschreibung - Titel" parsen
     const grid = document.getElementById('gallery-grid');
-    files
-      .filter(f => f.name.match(/\.(jpg|jpeg|png|webp)$/i) && f.name.toLowerCase() !== 'artist.jpg')
-      .forEach((file, i) => {
-        let base  = file.name.replace(/\.[^/.]+$/, '');
-        // Check for VERKAUFT prefix
-        const sold = /^VERKAUFT\s*-\s*/i.test(base);
-        if (sold) base = base.replace(/^VERKAUFT\s*-\s*/i, '');
-        const parts = base.split(' - ');
-        let year = '', title = base, desc = '';
-        if (parts.length === 3) { year = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
-        else if (parts.length === 2) { year = parts[0].trim(); title = parts[1].trim(); }
-        const card = document.createElement('div');
-        card.className = 'pcard' + (sold ? ' sold' : '');
-        const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
-        const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Anfragen</a>` : '';
-        card.innerHTML = `
-          <div class="p-wrapper">
-            <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy"><div class="p-spot"></div></div>
-            <div class="p-info">
-              <div class="p-meta"><div class="p-title">${title}</div><div class="p-year">${year}</div></div>
-              <div class="p-desc">${desc}</div>
-              ${inquireBtn}
-            </div>
-          </div>`;
-        card.onclick = () => {
-          document.getElementById('lb-img').src = file.download_url;
-          document.getElementById('lb-title').textContent = title;
-          document.getElementById('lightbox').classList.add('open');
-        };
-        grid.appendChild(card);
-        new IntersectionObserver(entries => {
-          entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-        }).observe(card);
-      });
-  } catch (e) { console.error(e); }
+    
+    // Galerie — artist.jpg ausschließen, Daten für die Navigation filtern
+    allPaintingsData = files.filter(f => f.name.match(/\.(jpg|jpeg|png|webp)$/i) && f.name.toLowerCase() !== 'artist.jpg');
+
+    // Spinner entfernen, sobald Daten geladen sind
+    const loader = document.getElementById('gallery-loader');
+    if(loader) loader.remove();
+
+    if(allPaintingsData.length === 0) {
+      grid.innerHTML = '<div class="loader-text" style="grid-column:1/-1; text-align:center;">Momentan keine Werke in der Galerie vorhanden.</div>';
+      return;
+    }
+
+    allPaintingsData.forEach((file, index) => {
+      let base  = file.name.replace(/\.[^/.]+$/, '');
+      // Check for VERKAUFT prefix
+      const sold = /^VERKAUFT\s*-\s*/i.test(base);
+      if (sold) base = base.replace(/^VERKAUFT\s*-\s*/i, '');
+      const parts = base.split(' - ');
+      let year = '', title = base, desc = '';
+      if (parts.length === 3) { year = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
+      else if (parts.length === 2) { year = parts[0].trim(); title = parts[1].trim(); }
+      const card = document.createElement('div');
+      card.className = 'pcard' + (sold ? ' sold' : '');
+      const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
+      const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Anfragen</a>` : '';
+      card.innerHTML = `
+        <div class="p-wrapper">
+          <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy"><div class="p-spot"></div></div>
+          <div class="p-info">
+            <div class="p-meta"><div class="p-title">${title}</div><div class="p-year">${year}</div></div>
+            <div class="p-desc">${desc}</div>
+            ${inquireBtn}
+          </div>
+        </div>`;
+      
+      // Nutzt jetzt den Index zur Steuerung der Lightbox
+      card.onclick = () => openLightboxAtIndex(index);
+      
+      grid.appendChild(card);
+      new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+      }).observe(card);
+    });
+  } catch (e) { 
+    console.error(e); 
+    const loader = document.getElementById('gallery-loader');
+    if(loader) {
+      loader.innerHTML = '<div class="loader-text" style="color:var(--gold);">Galerie temporär nicht erreichbar. Bitte versuchen Sie es später noch einmal.</div>';
+    }
+  }
+}
+
+// Zentrale Navigationsfunktion für Lightbox-Inhalte
+function openLightboxAtIndex(index) {
+  if (index < 0 || index >= allPaintingsData.length) return;
+  currentPaintingIndex = index;
+  
+  const file = allPaintingsData[index];
+  let base = file.name.replace(/\.[^/.]+$/, '');
+  if (/^VERKAUFT\s*-\s*/i.test(base)) base = base.replace(/^VERKAUFT\s*-\s*/i, '');
+  const parts = base.split(' - ');
+  const title = parts.length === 3 ? parts[2].trim() : (parts.length === 2 ? parts[1].trim() : base);
+
+  document.getElementById('lb-img').src = file.download_url;
+  document.getElementById('lb-title').textContent = title;
+  document.getElementById('lightbox').classList.add('open');
 }
 
 document.querySelector('.lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
 document.querySelector('.lb-bg').onclick = () => document.getElementById('lightbox').classList.remove('open');
+
+// Klick-Events für Desktop-Pfeile
+document.getElementById('lb-prev').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex - 1); };
+document.getElementById('lb-next').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex + 1); };
 
 function initParticles() {
   const cv = document.getElementById('particles-canvas');
@@ -525,16 +591,16 @@ updateNav(); // sofort beim Laden ausführen
 document.getElementById('year-now').textContent = new Date().getFullYear();
 initParticles();
 fetchPaintings();
+
 // Sorgt dafür, dass man das Künstler-Bild anklicken und vergrößern kann
 document.getElementById('artist-img').onclick = function() {
-  // Nur öffnen, wenn auch wirklich ein Bild geladen ist (nicht beim Platzhalter)
   if (this.src && !this.src.endsWith('#') && this.style.display !== 'none') {
     document.getElementById('lb-img').src = this.src;
-    document.getElementById('lb-title').textContent = "Moritz"; // Der Titel in der Großansicht
+    document.getElementById('lb-title').textContent = "Moritz"; 
     document.getElementById('lightbox').classList.add('open');
   }
 };
-// Macht den Mauszeiger über dem Künstlerbild zu einer Lupe/Hand, damit man sieht, dass es anklickbar ist
+
 // ── MOBILE NAV ──
 (function(){
   const burger  = document.getElementById('nav-hamburger');
@@ -557,25 +623,56 @@ document.getElementById('artist-img').onclick = function() {
   overlay.addEventListener('click', closeNav);
   document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeNav));
 })();
-// ESC-Taste schließt geöffnete Modals (Lightbox & Impressum)
+
+// ESC-Taste & Pfeiltasten (Tastatur-Events)
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
-    
-    // 1. Schließe die BILDER-LIGHTBOX (falls sie offen ist)
+    // Lightbox schließen
     const lightbox = document.getElementById('lightbox');
     if (lightbox && lightbox.classList.contains('open')) {
       lightbox.classList.remove('open');
     }
     
-    // 2. Schließe das IMPRESSUM (falls es offen ist)
+    // Impressum-Modal schließen
     const impressum = document.getElementById('impressum-modal');
     if (impressum && impressum.style.display === 'flex') {
       impressum.style.display = 'none';
-      document.body.style.overflow = ''; // Scrollen wieder erlauben
+      document.body.style.overflow = ''; 
     }
+  }
 
+  // Tastatur-Navigation (Links/Rechts) für geöffnete Lightbox
+  const lightbox = document.getElementById('lightbox');
+  if (lightbox && lightbox.classList.contains('open')) {
+    if (event.key === 'ArrowLeft') openLightboxAtIndex(currentPaintingIndex - 1);
+    if (event.key === 'ArrowRight') openLightboxAtIndex(currentPaintingIndex + 1);
   }
 });
+
+// ── TOUCH-GESTEN (WISCHEN AM HANDY) ──
+let touchStartX = 0;
+let touchEndX = 0;
+const lbContent = document.querySelector('.lb-content');
+
+if (lbContent) {
+  lbContent.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  lbContent.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    const swipeThreshold = 50; // Mindestdistanz für Swipe
+    
+    // Nach links wischen -> Nächstes Bild
+    if (touchEndX < touchStartX - swipeThreshold) {
+      openLightboxAtIndex(currentPaintingIndex + 1);
+    }
+    // Nach rechts wischen -> Vorheriges Bild
+    if (touchEndX > touchStartX + swipeThreshold) {
+      openLightboxAtIndex(currentPaintingIndex - 1);
+    }
+  }, { passive: true });
+}
 </script>
 </body>
 </html>
