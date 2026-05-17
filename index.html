@@ -155,6 +155,15 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .p-title { font-size:1.3rem; font-weight:400; font-style:italic; color:var(--text); letter-spacing:0.02em; }
 .p-year { font-size:0.68rem; letter-spacing:0.22em; color:var(--gold); }
 .p-desc { font-size:0.92rem; font-weight:300; color:var(--muted); line-height:1.75; letter-spacing:0.02em; }
+.p-price { font-size:0.9rem; font-weight:300; color:var(--gold-l); letter-spacing:0.06em; font-family:'Cormorant Garamond',serif; white-space:nowrap; }
+.pcard.sold .p-price { color:var(--muted); text-decoration:line-through; opacity:0.6; }
+
+/* TAP HINWEIS */
+.tap-hint { text-align:center; font-size:0.62rem; letter-spacing:0.35em; color:var(--muted); text-transform:uppercase; margin-top:-2rem; margin-bottom:2rem; opacity:0; animation:fadeUp 1s ease 2s forwards; }
+@media(min-width:769px){ .tap-hint { display:none; } }
+
+/* LIGHTBOX ZÄHLER */
+.lb-counter { font-size:0.6rem; letter-spacing:0.4em; color:var(--muted); text-transform:uppercase; font-family:'Cinzel',serif; }
 
 /* ARTIST PAGE */
 .artist-sec { padding:5rem 2rem 7rem; max-width:1100px; margin:0 auto; }
@@ -368,6 +377,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   <div class="sec-line"></div>
 </section>
 
+<div class="tap-hint">✦ Bild antippen zum Vergrößern ✦</div>
+
 <div class="gallery-wrap">
   <div class="gallery-grid" id="gallery-grid">
     <div class="gallery-loader" id="gallery-loader">
@@ -470,6 +481,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   <div class="lb-content">
     <img id="lb-img" src="">
     <div class="lb-title" id="lb-title"></div>
+    <div class="lb-counter" id="lb-counter"></div>
   </div>
 </div>
 
@@ -516,9 +528,11 @@ async function fetchPaintings() {
       const sold = /^VERKAUFT\s*-\s*/i.test(base);
       if (sold) base = base.replace(/^VERKAUFT\s*-\s*/i, '');
       const parts = base.split(' - ');
-      let year = '', title = base, desc = '';
-      if (parts.length === 3) { year = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
-      else if (parts.length === 2) { year = parts[0].trim(); title = parts[1].trim(); }
+      let price = '', title = base, desc = '';
+      if (parts.length === 3) { price = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
+      else if (parts.length === 2) { price = parts[0].trim(); title = parts[1].trim(); }
+      // Preis formatieren: sicherstellen dass € drin ist
+      const priceDisplay = price ? (price.includes('€') || price.toLowerCase().includes('euro') ? price : price + ' €') : '';
       const card = document.createElement('div');
       card.className = 'pcard' + (sold ? ' sold' : '');
       const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
@@ -527,7 +541,7 @@ async function fetchPaintings() {
         <div class="p-wrapper">
           <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy"><div class="p-spot"></div></div>
           <div class="p-info">
-            <div class="p-meta"><div class="p-title">${title}</div><div class="p-year">${year}</div></div>
+            <div class="p-meta"><div class="p-title">${title}</div>${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}</div>
             <div class="p-desc">${desc}</div>
             ${inquireBtn}
           </div>
@@ -563,8 +577,9 @@ function openLightboxAtIndex(index) {
 
   document.getElementById('lb-img').src = file.download_url;
   document.getElementById('lb-title').textContent = title;
+  document.getElementById('lb-counter').textContent = (index + 1) + ' von ' + allPaintingsData.length;
   document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden'; // Verhindert das Scrollen im Hintergrund
+  document.body.style.overflow = 'hidden';
 }
 
 // Gemeinsame Schließen-Funktion für die Lightbox
