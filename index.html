@@ -165,7 +165,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .lb-title { font-size:1.55rem; font-style:italic; letter-spacing:0.05em; color:var(--text); }
 
 /* HAMBURGER */
-.nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; z-index: 300; }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; z-index: 300; min-width:44px; min-height:44px; justify-content:center; align-items:center; padding:10px; }
 .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--gold); transition: all 0.35s ease; }
 
 /* ── MOBILE DRAWER ── */
@@ -271,14 +271,14 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
     <li><a href="#about">Künstler</a></li>
     <li><a href="#contact">Kontakt</a></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menü öffnen">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="nav-drawer">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- Mobile overlay + drawer -->
 <div class="nav-overlay" id="nav-overlay"></div>
-<div class="nav-drawer" id="nav-drawer">
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Navigation" aria-modal="true" aria-hidden="true">
   <a href="#about" class="drawer-link">Künstler</a>
   <a href="#contact" class="drawer-link">Kontakt</a>
 </div>
@@ -479,15 +479,35 @@ document.getElementById('artist-img').style.cursor = 'pointer';
     drawer.classList.add('open');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Menü schließen');
+    drawer.setAttribute('aria-hidden', 'false');
+    // Focus first link in drawer
+    const firstLink = drawer.querySelector('a');
+    if (firstLink) firstLink.focus();
   }
   function closeNav(){
     burger.classList.remove('open');
     drawer.classList.remove('open');
     overlay.classList.remove('open');
     document.body.style.overflow = '';
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Menü öffnen');
+    drawer.setAttribute('aria-hidden', 'true');
+    burger.focus();
   }
   burger.addEventListener('click', () => drawer.classList.contains('open') ? closeNav() : openNav());
   overlay.addEventListener('click', closeNav);
   document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeNav));
+  // Escape key closes drawer
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) closeNav(); });
+  // Trap focus inside drawer when open
+  drawer.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const focusable = drawer.querySelectorAll('a');
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
 })();
 </script>
