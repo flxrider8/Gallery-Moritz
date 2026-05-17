@@ -702,6 +702,7 @@ if (lbContent) {
     lbContent.style.opacity = '1';
   }, { passive: true });
 }
+.filter(f => f.name.match(/\.(jpg|jpeg|png|webp)$/i) && !['artist.jpg','apple-touch-icon.png'].includes(f.name.toLowerCase()))
 </script>
 </body>
   
