@@ -557,6 +557,25 @@ document.getElementById('artist-img').onclick = function() {
   overlay.addEventListener('click', closeNav);
   document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeNav));
 })();
+// ESC-Taste schließt geöffnete Modals (Lightbox & Impressum)
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    
+    // 1. Schließe die BILDER-LIGHTBOX (falls sie offen ist)
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox && lightbox.classList.contains('open')) {
+      lightbox.classList.remove('open');
+    }
+    
+    // 2. Schließe das IMPRESSUM (falls es offen ist)
+    const impressum = document.getElementById('impressum-modal');
+    if (impressum && impressum.style.display === 'flex') {
+      impressum.style.display = 'none';
+      document.body.style.overflow = ''; // Scrollen wieder erlauben
+    }
+
+  }
+});
 </script>
 </body>
 </html>
