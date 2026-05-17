@@ -198,6 +198,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 }
 .nav-drawer a:last-child { border-bottom: none; }
 .nav-drawer a:hover { color: var(--gold); padding-left: 0.5rem; }
+.nav-drawer a:focus { outline: none; }
+.nav-drawer a:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
 .nav-overlay {
   position: fixed; inset: 0; z-index: 249;
   background: rgba(0,0,0,0.55);
@@ -482,9 +484,9 @@ document.getElementById('artist-img').style.cursor = 'pointer';
     burger.setAttribute('aria-expanded', 'true');
     burger.setAttribute('aria-label', 'Menü schließen');
     drawer.setAttribute('aria-hidden', 'false');
-    // Focus first link in drawer
+    // Focus first link in drawer (visually hidden for mouse/touch users)
     const firstLink = drawer.querySelector('a');
-    if (firstLink) firstLink.focus();
+    if (firstLink) { firstLink.focus({ preventScroll: true }); }
   }
   function closeNav(){
     burger.classList.remove('open');
