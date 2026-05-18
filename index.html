@@ -750,16 +750,5 @@ initParticles();
 fetchPaintings();
 </script>
 
-function updateNav() {
-  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
-  const btn = document.getElementById('scroll-top-btn');
-  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
-}
-window.addEventListener('scroll', updateNav, { passive: true });
-updateNav();
-document.getElementById('year-now').textContent = new Date().getFullYear();
-initParticles();
-fetchPaintings();
-</script>
 </body>
 </html>
