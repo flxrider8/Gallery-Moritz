@@ -88,7 +88,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 
 /* VERKAUFT BADGE */
 .sold-badge { position:absolute; top:18px; left:18px; z-index:10; background:rgba(7,7,6,0.88); border:1px solid var(--gold); color:var(--gold); font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em; text-transform:uppercase; padding:0.35rem 0.75rem; pointer-events:none; }
-.pcard.sold .p-img-box img { filter:grayscale(60%); opacity:0.7; }
+.pcard.sold .p-img-box img { filter:grayscale(70%) brightness(0.45); opacity:1; }
 
 /* ANFRAGEN BUTTON */
 .p-inquire { display:inline-block; margin-top:1rem; font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); border:1px solid var(--border); padding:0.55rem 1.2rem; text-decoration:none; transition:border-color 0.3s, color 0.3s, background 0.3s; cursor:pointer; background:none; }
@@ -197,7 +197,21 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 
 /* MOBILE Galerie */
 @media(max-width:768px) { .gallery-grid { gap:2.5rem !important; } .p-img-box { border-width:8px !important; } .p-title { font-size:1.2rem !important; } }
-@media(min-width:769px) and (max-width:1024px) { .info-panel { max-width:600px; left:50%; right:auto; transform:translateX(-50%) translateY(100%); } .info-panel.open { transform:translateX(-50%) translateY(0); } .info-panel-title { font-size:2.4rem; } .info-panel-price { font-size:1.9rem; } }
+@media(min-width:769px) and (max-width:1024px) {
+  .info-panel { left:0; right:0; max-width:100%; transform:translateY(100%); max-height:80vh; }
+  .info-panel.open { transform:translateY(0); }
+  .info-panel-img-wrap { aspect-ratio:16/7; }
+  .info-panel-body { padding:2rem 3rem 3rem; display:grid; grid-template-columns:1fr 1fr; gap:0 3rem; align-items:start; }
+  .info-panel-eyebrow { grid-column:1/-1; }
+  .info-panel-title { font-size:2.6rem; grid-column:1/-1; }
+  .info-panel-divider { grid-column:1/-1; }
+  .info-panel-desc { grid-column:1; }
+  .info-panel-price { font-size:2rem; grid-column:2; text-align:right; }
+  .info-panel-sold-note { grid-column:1/-1; }
+  .info-panel-btn { grid-column:1; margin-top:0; }
+  .info-panel-share { grid-column:2; margin-top:0; }
+  .info-panel-close-row { grid-column:1/-1; }
+}
 @media(min-width:1025px) { .info-panel { display:none; } .info-panel-backdrop { display:none; } }
 
 /* HAMBURGER */
@@ -259,6 +273,24 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   .contact-grid { grid-template-columns:1fr; }
   .artist-portrait-frame { width:150px; height:185px; }
 }
+
+/* NACH OBEN BUTTON */
+.scroll-top-btn {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+  width: 48px; height: 48px;
+  background: rgba(7,7,6,0.9);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s, background 0.3s, transform 0.3s;
+  backdrop-filter: blur(8px);
+  font-size: 1.1rem;
+}
+.scroll-top-btn.visible { opacity: 1; pointer-events: all; }
+.scroll-top-btn:hover { background: rgba(200,169,81,0.15); transform: translateY(-3px); }
+@media(max-width:1024px) { .scroll-top-btn { bottom: 1.5rem; right: 1.2rem; } }
 </style>
 </head>
 <body>
@@ -376,6 +408,11 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
     <button onclick="document.getElementById('impressum-modal').style.display='none'" style="margin-top:2rem;background:none;border:1px solid var(--border);color:var(--muted);padding:0.5rem 1.2rem;cursor:pointer;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.25em;">SCHLIESSEN</button>
   </div>
 </div>
+
+<!-- NACH OBEN BUTTON -->
+<button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Nach oben">
+  ↑
+</button>
 
 <!-- INFO PANEL -->
 <div class="info-panel-backdrop" id="info-backdrop"></div>
@@ -701,7 +738,11 @@ function initParticles() {
   frame();
 }
 
-function updateNav() { document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60); }
+function updateNav() {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+  const btn = document.getElementById('scroll-top-btn');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+}
 window.addEventListener('scroll', updateNav, { passive: true });
 updateNav();
 document.getElementById('year-now').textContent = new Date().getFullYear();
