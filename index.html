@@ -37,9 +37,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 130px; }
 body { background: var(--black); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; overflow-x: hidden; cursor: default; }
 body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:0.35; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
 
-/* HINTERGRUND SCROLL-SPERRE */
-html.lock-scroll, body.lock-scroll { overflow: hidden !important; height: 100% !important; }
-
 /* NAV */
 nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:1.6rem 4rem; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom,rgba(7,7,6,0.9) 0%,transparent 100%); transition:background 0.4s; }
 nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border); }
@@ -151,13 +148,14 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .lb-title { font-size:1.55rem; font-style:italic; letter-spacing:0.05em; color:var(--text); }
 
 /* INFO PANEL (Bottom Sheet) */
-.info-panel { position:fixed; bottom:0; left:0; right:0; z-index:600; background:var(--surface); border-top:1px solid var(--border); transform:translateY(100%); transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); max-height:92vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior: contain; }
+.info-panel { position:fixed; bottom:0; left:0; right:0; z-index:600; background:var(--surface); border-top:1px solid var(--border); transform:translateY(100%); transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); max-height:92vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 .info-panel.open { transform:translateY(0); }
-.info-panel-backdrop { position:fixed; inset:0; z-index:599; background:rgba(7,7,6,0.7); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.4s; touch-action: none; }
+.info-panel-backdrop { position:fixed; inset:0; z-index:599; background:rgba(7,7,6,0.7); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.4s; }
 .info-panel-backdrop.open { opacity:1; pointer-events:all; }
 .info-panel-handle { width:36px; height:3px; background:var(--border); border-radius:2px; margin:1rem auto 0; }
 .info-panel-img-wrap { width:100%; aspect-ratio:4/3; overflow:hidden; position:relative; cursor:pointer; }
 .info-panel-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; border:10px solid var(--gold); box-sizing:border-box; box-shadow:inset 0 0 0 2px var(--gold-d),inset 0 0 0 3px var(--gold),inset 0 0 0 5px var(--gold-d); }
+/* 6. X Button oben rechts */
 .info-panel-x { position:absolute; top:0.8rem; right:0.8rem; z-index:10; width:36px; height:36px; background:rgba(7,7,6,0.85); border:1px solid var(--border); color:var(--muted); font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(4px); transition:color 0.25s, border-color 0.25s; }
 .info-panel-x:hover { color:var(--gold); border-color:var(--gold); }
 .info-img-expand-hint { position:absolute; bottom:12px; right:12px; background:rgba(7,7,6,0.75); border:1px solid var(--border); color:var(--gold); width:36px; height:36px; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); opacity:0.85; }
@@ -197,17 +195,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .info-panel.open .info-panel-share { opacity: 1; transform: translateY(0); }
 .info-panel-share:hover { border-color: var(--gold); background: rgba(200,169,81,0.06); }
 
-/* MOBILE Galerie & HANDY INFO BOX OVERRIDES */
-@media(max-width:768px) { 
-  .gallery-grid { gap:2.5rem !important; } 
-  .p-img-box { border-width:8px !important; } 
-  .p-title { font-size:1.2rem !important; } 
-  
-  /* Verhindert das "Oben Kleben" auf Handys, macht es zum sauberen Bottom Sheet */
-  .info-panel { max-height: 75vh !important; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
-  .info-panel-img-wrap { aspect-ratio: 16/10 !important; }
-}
-
+/* MOBILE Galerie */
+@media(max-width:768px) { .gallery-grid { gap:2.5rem !important; } .p-img-box { border-width:8px !important; } .p-title { font-size:1.2rem !important; } }
 @media(min-width:769px) and (max-width:1024px) {
   .info-panel { left:0; right:0; max-width:100%; transform:translateY(100%); max-height:80vh; }
   .info-panel.open { transform:translateY(0); }
@@ -260,7 +249,6 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   .nav-hamburger { display:flex; }
   .hero-title { font-size:clamp(3rem,16vw,6rem); }
   .hero-subtitle { font-size:0.88rem; letter-spacing:0.14em; padding:0 1.2rem; }
-  .hero-grid { }
   .hero-eyebrow { font-size:0.6rem; }
   .gallery-wrap { padding:0 1.2rem 5rem; }
   .gallery-grid { grid-template-columns:1fr; gap:3rem; }
@@ -339,6 +327,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   <div class="sec-eye">Kollektion</div>
   <h2 class="sec-title">Ausgewählte Werke</h2>
   <div class="sec-line"></div>
+  <!-- 1. Bildanzahl -->
   <div id="gallery-count" style="font-size:0.62rem;letter-spacing:0.4em;color:var(--muted);text-transform:uppercase;font-family:'Cinzel',serif;opacity:0;transition:opacity 0.8s;margin-top:0.5rem;"></div>
 </section>
 
@@ -403,11 +392,11 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 <footer class="main-footer">
   <div class="foot-logo">ATELIER</div>
   <div class="foot-text">© <span id="year-now"></span> — Alle Rechte vorbehalten</div>
-  <a href="#" onclick="document.getElementById('impressum-modal').style.display='flex';document.documentElement.classList.add('lock-scroll');return false;" style="font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);text-decoration:none;text-transform:uppercase;font-family:'Cinzel',serif;">Impressum</a>
+  <a href="#" onclick="document.getElementById('impressum-modal').style.display='flex';return false;" style="font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);text-decoration:none;text-transform:uppercase;font-family:'Cinzel',serif;">Impressum</a>
 </footer>
 
 <div id="impressum-modal" style="display:none;position:fixed;inset:0;z-index:800;align-items:center;justify-content:center;">
-  <div onclick="document.getElementById('impressum-modal').style.display='none';document.documentElement.classList.remove('lock-scroll');" style="position:absolute;inset:0;background:rgba(7,7,6,0.92);backdrop-filter:blur(10px);cursor:pointer;"></div>
+  <div onclick="document.getElementById('impressum-modal').style.display='none'" style="position:absolute;inset:0;background:rgba(7,7,6,0.92);backdrop-filter:blur(10px);cursor:pointer;"></div>
   <div style="position:relative;z-index:1;background:var(--surface);border:1px solid var(--border);padding:3rem;max-width:480px;width:90%;font-family:'Cormorant Garamond',serif;">
     <div style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.35em;color:var(--gold);margin-bottom:1.5rem;">IMPRESSUM</div>
     <div style="font-size:0.95rem;color:var(--muted);line-height:2;letter-spacing:0.03em;">
@@ -416,19 +405,22 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
       <a href="mailto:moritz.geberth@gmail.com" style="color:var(--gold);text-decoration:none;">moritz.geberth@gmail.com</a><br><br>
       <em style="font-size:0.85rem;">Privatperson — kein eingetragenes Gewerbe.<br>Diese Website dient der Präsentation künstlerischer Werke.</em>
     </div>
-    <button onclick="document.getElementById('impressum-modal').style.display='none';document.documentElement.classList.remove('lock-scroll');" style="margin-top:2rem;background:none;border:1px solid var(--border);color:var(--muted);padding:0.5rem 1.2rem;cursor:pointer;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.25em;">SCHLIESSEN</button>
+    <button onclick="document.getElementById('impressum-modal').style.display='none'" style="margin-top:2rem;background:none;border:1px solid var(--border);color:var(--muted);padding:0.5rem 1.2rem;cursor:pointer;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.25em;">SCHLIESSEN</button>
   </div>
 </div>
 
+<!-- NACH OBEN BUTTON -->
 <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Nach oben">
   ↑
 </button>
 
+<!-- INFO PANEL -->
 <div class="info-panel-backdrop" id="info-backdrop"></div>
 <div class="info-panel" id="info-panel">
   <div class="info-panel-handle"></div>
   <div class="info-panel-img-wrap" id="info-img-wrap">
     <img id="info-img" src="" alt="">
+    <!-- 6. X oben rechts -->
     <button class="info-panel-x" id="info-panel-x" onclick="event.stopPropagation(); closeInfoPanel();">✕</button>
     <div class="info-img-expand-hint">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 3h6m0 0v6m0-6l-7 7M9 21H3m0 0v-6m0 6l7-7"/></svg>
@@ -449,12 +441,14 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   </div>
 </div>
 
+<!-- ARTIST LIGHTBOX -->
 <div class="lightbox" id="artist-lightbox">
   <div class="lb-bg" id="artist-lb-bg"></div>
   <button class="lb-close" id="artist-lb-close">✕</button>
   <div class="lb-content"><img id="artist-lb-img" src=""></div>
 </div>
 
+<!-- MAIN LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <div class="lb-bg" id="lb-bg"></div>
   <button class="lb-close" id="lb-close">✕</button>
@@ -513,6 +507,7 @@ async function fetchPaintings() {
       return;
     }
 
+    // 1. Bildanzahl anzeigen
     const soldCount = allPaintingsData.filter(f => /^VERKAUFT\s*-\s*/i.test(f.name)).length;
     const countEl = document.getElementById('gallery-count');
     if (countEl) {
@@ -555,7 +550,6 @@ function openLightboxAtIndex(index) {
   document.getElementById('lb-counter').textContent = (index + 1) + ' von ' + allPaintingsData.length;
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
-  document.documentElement.classList.add('lock-scroll');
 }
 
 const closeLightbox = () => {
@@ -566,11 +560,9 @@ const closeLightbox = () => {
       document.getElementById('info-panel').classList.add('open');
       document.getElementById('info-backdrop').classList.add('open');
       document.body.style.overflow = 'hidden';
-      document.documentElement.classList.add('lock-scroll');
     }, 200);
   } else {
     document.body.style.overflow = '';
-    document.documentElement.classList.remove('lock-scroll');
   }
 };
 
@@ -605,7 +597,6 @@ function openInfoPanel(index) {
     document.getElementById('info-backdrop').classList.add('open');
     panel.classList.add('open');
     document.body.style.overflow = 'hidden';
-    document.documentElement.classList.add('lock-scroll');
   });
 }
 
@@ -613,11 +604,11 @@ function closeInfoPanel() {
   document.getElementById('info-panel').classList.remove('open');
   document.getElementById('info-backdrop').classList.remove('open');
   document.body.style.overflow = '';
-  document.documentElement.classList.remove('lock-scroll');
 }
 
 document.getElementById('info-backdrop').onclick = closeInfoPanel;
 
+// 3. Teilen
 function shareInfoPanel() {
   const title = document.getElementById('info-title').textContent;
   const url = window.location.href.split('#')[0];
@@ -638,7 +629,7 @@ function shareInfoPanel() {
   }
 }
 
-// Bild antippen → Fullscreen Lightbox
+// Bild antippen → Fullscreen
 document.getElementById('info-img-wrap').onclick = function(e) {
   if (e.target.closest('#info-panel-x')) return;
   const img = document.getElementById('info-img');
@@ -652,11 +643,10 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     document.getElementById('lb-counter').textContent = '';
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
-    document.documentElement.classList.add('lock-scroll');
   }, 200);
 };
 
-// Wischen nach unten schließt Info Panel
+// 5. Wischen nach unten schließt Info Panel
 (function() {
   const panel = document.getElementById('info-panel');
   let startY = 0, startScrollTop = 0;
@@ -677,11 +667,10 @@ document.getElementById('artist-img').onclick = function() {
     document.getElementById('artist-lb-img').src = this.src;
     document.getElementById('artist-lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
-    document.documentElement.classList.add('lock-scroll');
   }
 };
-document.getElementById('artist-lb-bg').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; document.documentElement.classList.remove('lock-scroll'); };
-document.getElementById('artist-lb-close').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; document.documentElement.classList.remove('lock-scroll'); };
+document.getElementById('artist-lb-bg').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
+document.getElementById('artist-lb-close').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 
 // MOBILE NAV
 (function(){
@@ -689,8 +678,8 @@ document.getElementById('artist-lb-close').onclick = () => { document.getElement
   const drawer = document.getElementById('nav-drawer');
   const overlay = document.getElementById('nav-overlay');
   if (!burger||!drawer||!overlay) return;
-  function openNav() { burger.classList.add('open'); drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; document.documentElement.classList.add('lock-scroll'); }
-  function closeNav() { burger.classList.remove('open'); drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; document.documentElement.classList.remove('lock-scroll'); }
+  function openNav() { burger.classList.add('open'); drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeNav() { burger.classList.remove('open'); drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
   burger.addEventListener('click', () => drawer.classList.contains('open') ? closeNav() : openNav());
   overlay.addEventListener('click', closeNav);
   document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeNav));
@@ -700,8 +689,8 @@ document.getElementById('artist-lb-close').onclick = () => { document.getElement
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     if (document.getElementById('lightbox').classList.contains('open')) closeLightbox();
-    if (document.getElementById('artist-lightbox').classList.contains('open')) { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow=''; document.documentElement.classList.remove('lock-scroll'); }
-    if (document.getElementById('impressum-modal').style.display === 'flex') { document.getElementById('impressum-modal').style.display='none'; document.body.style.overflow=''; document.documentElement.classList.remove('lock-scroll'); }
+    if (document.getElementById('artist-lightbox').classList.contains('open')) { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow=''; }
+    if (document.getElementById('impressum-modal').style.display === 'flex') { document.getElementById('impressum-modal').style.display='none'; document.body.style.overflow=''; }
     if (document.getElementById('info-panel').classList.contains('open')) closeInfoPanel();
   }
   if (document.getElementById('lightbox').classList.contains('open')) {
@@ -744,8 +733,8 @@ function initParticles() {
   const ctx = cv.getContext('2d');
   const resize = () => { cv.width = window.innerWidth; cv.height = window.innerHeight; };
   resize(); window.onresize = resize;
-  const pts = Array.from({length:50}, () => ({ x:Math.random()*cv.width, y:Math.random()*cv.height, vy:-Math.random()*0.3-0.1, sz:Math.random()*1.5+0.5 }));
-  function frame() { ctx.clearRect(0,0,cv.width,cv.height); pts.forEach(p => { p.y+=p.vy; if(p.y<0) p.y=cv.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,Math.PI*2); ctx.fillStyle="rgba(200,169,81,0.3)"; ctx.fill(); }); requestAnimationFrame(frame); }
+  const pts = Array.from({length:75}, () => ({ x:Math.random()*cv.width, y:Math.random()*cv.height, vy:-Math.random()*0.3-0.1, sz:Math.random()*2.0+0.8 }));
+  function frame() { ctx.clearRect(0,0,cv.width,cv.height); pts.forEach(p => { p.y+=p.vy; if(p.y<0) p.y=cv.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,Math.PI*2); ctx.fillStyle="rgba(200,169,81,0.45)"; ctx.fill(); }); requestAnimationFrame(frame); }
   frame();
 }
 
@@ -761,5 +750,16 @@ initParticles();
 fetchPaintings();
 </script>
 
+function updateNav() {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+  const btn = document.getElementById('scroll-top-btn');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+document.getElementById('year-now').textContent = new Date().getFullYear();
+initParticles();
+fetchPaintings();
+</script>
 </body>
 </html>
