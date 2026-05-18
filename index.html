@@ -54,8 +54,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .hero-title em { font-style:italic; color:var(--gold); }
 .hero-subtitle { margin-top:2.2rem; font-size:1rem; letter-spacing:0.22em; color:var(--muted); font-weight:300; opacity:0; animation:fadeUp 1s ease 1s forwards; }
 .hero-rule { width:1px; height:90px; background:linear-gradient(to bottom,transparent,var(--gold),transparent); margin:3rem auto 0; opacity:0; animation:fadeUp 1s ease 1.3s forwards; }
-/* 4. Entdecken zentriert */
-.hero-scroll { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.5rem; opacity:0; animation:fadeUp 1s ease 1.6s forwards; text-align:center; }
+.hero-scroll { position:relative; display:flex; flex-direction:column; align-items:center; gap:0.5rem; opacity:0; animation:fadeUp 1s ease 1.6s forwards; margin-top:1.2rem; }
 .hero-scroll span { font-size:0.58rem; letter-spacing:0.45em; text-transform:uppercase; color:var(--muted); }
 .scroll-bar { width:1px; height:45px; background:var(--gold-d); animation:scrollAnim 2.2s ease infinite; }
 @keyframes scrollAnim { 0%,100%{transform:scaleY(1);opacity:0.5;} 50%{transform:scaleY(0.4);opacity:1;} }
@@ -180,6 +179,21 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .info-panel-close-row { display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-top:1rem; font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em; color:var(--muted); text-transform:uppercase; cursor:pointer; background:none; border:none; width:100%; padding:0.5rem; transition:color 0.3s; opacity:0; transition:opacity 0.4s 0.55s, color 0.3s; }
 .info-panel.open .info-panel-close-row { opacity:1; }
 .info-panel-close-row:hover { color:var(--gold); }
+
+/* TEILEN BUTTON */
+.info-panel-share {
+  display: block; width: 100%; padding: 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); background: transparent;
+  border: 1px solid var(--border); text-align: center;
+  cursor: pointer; margin-top: 0.8rem;
+  transition: border-color 0.3s, background 0.3s;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s 0.54s, transform 0.4s 0.54s, border-color 0.3s, background 0.3s;
+}
+.info-panel.open .info-panel-share { opacity: 1; transform: translateY(0); }
+.info-panel-share:hover { border-color: var(--gold); background: rgba(200,169,81,0.06); }
 
 /* MOBILE Galerie */
 @media(max-width:768px) { .gallery-grid { gap:2.5rem !important; } .p-img-box { border-width:8px !important; } .p-title { font-size:1.2rem !important; } }
@@ -383,6 +397,9 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
     <div class="info-panel-price" id="info-price"></div>
     <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
     <a class="info-panel-btn" id="info-btn" href="#">Anfragen</a>
+    <button class="info-panel-share" id="info-share-btn" onclick="shareInfoPanel()">
+      ↑ &nbsp; Teilen
+    </button>
     <button class="info-panel-close-row" onclick="closeInfoPanel()">✕ &nbsp; Schließen</button>
   </div>
 </div>
@@ -553,6 +570,27 @@ function closeInfoPanel() {
 }
 
 document.getElementById('info-backdrop').onclick = closeInfoPanel;
+
+// 3. Teilen
+function shareInfoPanel() {
+  const title = document.getElementById('info-title').textContent;
+  const url = window.location.href.split('#')[0];
+  if (navigator.share) {
+    navigator.share({
+      title: title + ' — Moritz Atelier',
+      text: 'Schau dir dieses Werk an: ' + title,
+      url: url
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('info-share-btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ &nbsp; Link kopiert';
+      btn.style.borderColor = 'var(--gold)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; }, 2000);
+    });
+  }
+}
 
 // Bild antippen → Fullscreen
 document.getElementById('info-img-wrap').onclick = function(e) {
