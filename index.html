@@ -111,7 +111,7 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .search-container:focus-within .search-icon { color: var(--gold); }
 
 /* TAP HINWEIS */
-.tap-hint { text-align:center; font-size:0.62rem; letter-spacing:0.35em; color:var(--muted); text-transform:uppercase; margin: 0 auto 2.5rem; opacity:0; animation:fadeUp 1s ease 2s forwards; display: block; }
+.tap-hint { text-align:center; font-size:0.62rem; letter-spacing:0.35em; color:var(--muted); text-transform:uppercase; margin: 0 auto 2.5rem; display: block; opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards; }
 @media(min-width:1025px){ .tap-hint { display:none; } }
 
 /* GALLERY */
@@ -183,7 +183,8 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 /* LIGHTBOX */
 .lightbox { position:fixed; inset:0; z-index:700; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.4s; }
 .lightbox.open { opacity:1; pointer-events:all; }
-.lb-bg { position:absolute; inset:0; background:rgba(7,7,6,0.99); backdrop-filter:blur(12px); cursor:pointer; }
+/* Extreme Ausdehnung, damit nie Ränder aufblitzten */
+.lb-bg { position:absolute; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; background:rgba(7,7,6,0.99); backdrop-filter:blur(12px); cursor:pointer; }
 .lb-close { position:absolute; top:2rem; right:2.5rem; z-index:1; background:none; border:1px solid var(--border); color:var(--muted); width:42px; height:42px; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:all 0.25s; }
 .lb-close:hover { color:var(--gold); border-color:var(--gold); }
 .lb-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:1.8rem; transform:scale(0.88); transition:transform 0.4s; max-width:85vw; max-height:90vh; }
@@ -192,11 +193,20 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
 .lb-title { font-size:1.55rem; font-style:italic; letter-spacing:0.05em; color:var(--text); }
 
 /* INFO PANEL (Bottom Sheet) */
-.info-panel { position:fixed; bottom:0; left:0; right:0; z-index:600; background:var(--surface); border-top:1px solid var(--border); transform:translateY(100%); transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); max-height:92vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-/* Verhindert Durchleuchten beim iOS-Overscroll Bounce */
-.info-panel::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 50vh; background: var(--surface); }
+.info-panel { 
+  position:fixed; 
+  bottom: -50vh; /* Verhindert das Durchblitzen des Hintergrundes */
+  left:0; right:0; 
+  padding-bottom: 50vh; /* Erweitert die Box tief nach unten */
+  z-index:600; 
+  background:var(--surface); 
+  border-top:1px solid var(--border); 
+  transform:translateY(100%); 
+  transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); 
+  touch-action: none; /* Blockiert jegliches interne Scrollen */
+}
 .info-panel.open { transform:translateY(0); }
-.info-panel-backdrop { position:fixed; inset:0; z-index:599; background:rgba(7,7,6,0.7); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.4s; }
+.info-panel-backdrop { position:fixed; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; z-index:599; background:rgba(7,7,6,0.7); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.4s; }
 .info-panel-backdrop.open { opacity:1; pointer-events:all; }
 .info-panel-handle { width:36px; height:3px; background:var(--border); border-radius:2px; margin:1rem auto 0; }
 .info-panel-img-wrap { width:100%; aspect-ratio:4/3; overflow:hidden; position:relative; cursor:pointer; }
@@ -708,6 +718,7 @@ function openInfoPanel(index) {
 
 function closeInfoPanel() {
   const panel = document.getElementById('info-panel');
+  panel.style.transition = 'transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94)';
   panel.style.transform = ''; // Clear inline styles
   panel.classList.remove('open');
   document.getElementById('info-backdrop').classList.remove('open');
@@ -754,28 +765,26 @@ document.getElementById('info-img-wrap').onclick = function(e) {
 // APPLE-LIKE SWIPE DOWN FÜR DAS INFO PANEL (1:1 Finger Tracking)
 (function() {
   const panel = document.getElementById('info-panel');
-  let startY = 0, currentY = 0, isDragging = false, startScrollTop = 0;
+  let startY = 0, currentY = 0, isDragging = false;
 
   panel.addEventListener('touchstart', e => {
-    startScrollTop = panel.scrollTop;
-    // Drag nur erlauben, wenn man ganz oben im Info Panel ist
-    if (startScrollTop <= 0) {
-      startY = e.touches[0].clientY;
-      isDragging = true;
-      panel.style.transition = 'none'; // CSS Transition entfernen, damit es exakt am Finger klebt
-    }
+    startY = e.touches[0].clientY;
+    isDragging = true;
+    panel.style.transition = 'none'; // CSS Transition entfernen, damit es exakt am Finger klebt
   }, { passive: true });
 
   panel.addEventListener('touchmove', e => {
     if (!isDragging) return;
     currentY = e.touches[0].clientY;
-    const diffY = currentY - startY;
+    let diffY = currentY - startY;
 
-    // Nur wenn der Finger nach unten wischt
     if (diffY > 0) {
+      // Finger bewegt sich nach unten = panel zieht mit
       panel.style.transform = `translateY(${diffY}px)`;
     } else {
-      panel.style.transform = `translateY(0px)`;
+      // Finger bewegt sich nach oben = leichter Widerstand (Rubber Band Effekt)
+      const rubberBand = diffY * 0.15;
+      panel.style.transform = `translateY(${rubberBand}px)`;
     }
   }, { passive: true });
 
@@ -788,13 +797,15 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     const diffY = currentY - startY;
     
     // Wenn weit genug nach unten gewischt wurde (Threshold), schließen
-    if (diffY > 100) {
+    if (diffY > 90) {
       closeInfoPanel();
     } else {
       // Ansonsten weich zurückschnappen lassen
       panel.style.transform = 'translateY(0)';
       setTimeout(() => {
-        panel.style.transform = ''; // Inline styles säubern
+        if(panel.classList.contains('open')) {
+          panel.style.transform = ''; // Inline styles säubern
+        }
       }, 400);
     }
   }, { passive: true });
