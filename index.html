@@ -199,8 +199,6 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   background:var(--surface); border-top:1px solid var(--border); 
   transform:translateY(100%); transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); 
   max-height:92vh; overflow-y:auto; -webkit-overflow-scrolling:touch; 
-  /* FIX für das iOS Safari "Durchleuchten"-Problem ohne Layout zu zerstören */
-  box-shadow: 0 200px 0 0 var(--surface);
 }
 .info-panel.open { transform:translateY(0); }
 .info-panel-backdrop { position:fixed; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; z-index:599; background:rgba(7,7,6,0.7); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.4s; }
@@ -268,6 +266,14 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   .search-input { font-size: 1rem; padding: 0.75rem 1rem 0.75rem 2.8rem; }
   .search-icon { left: 1rem; width: 16px; height: 16px; }
 
+  /* Mobile Info Panel Bugfix (Kein Durchleuchten & Wisch-Sperre) */
+  .info-panel { 
+    bottom: -50vh; padding-bottom: 50vh; 
+    touch-action: none; /* Blockiert internes Scrollen */
+    overflow: visible; 
+  }
+  .info-panel::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 50vh; background: var(--surface); }
+
   .gallery-wrap { padding:0 1.2rem 5rem; }
   .gallery-grid { grid-template-columns:1fr; gap:3rem; }
   .sec-head { padding:5rem 1.5rem 2.5rem; }
@@ -287,21 +293,25 @@ nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border
   .lb-close { top:1rem; right:1rem; }
 }
 
-/* TABLET Info Panel (Zentriertes Pop-Up, identisch zur funktionierenden Version) */
+/* TABLET Info Panel (Zentriertes Pop-Up, keine Wisch-Logik nötig) */
 @media(min-width:769px) and (max-width:1024px) {
-  .info-panel { left:0; right:0; max-width:100%; transform:translateY(100%); max-height:80vh; }
-  .info-panel.open { transform:translateY(0); }
-  .info-panel-img-wrap { aspect-ratio:16/7; }
-  .info-panel-body { padding:2rem 3rem 3rem; display:grid; grid-template-columns:1fr 1fr; gap:0 3rem; align-items:start; }
-  .info-panel-eyebrow { grid-column:1/-1; }
-  .info-panel-title { font-size:2.6rem; grid-column:1/-1; }
-  .info-panel-divider { grid-column:1/-1; }
-  .info-panel-desc { grid-column:1; }
-  .info-panel-price { font-size:2rem; grid-column:2; text-align:right; }
+  .info-panel { 
+    left: 50%; right: auto; bottom: 0; 
+    width: 640px; margin-left: -320px; 
+    border-left: 1px solid var(--border); border-right: 1px solid var(--border); 
+    border-top-left-radius: 12px; border-top-right-radius: 12px; 
+  }
+  .info-panel-img-wrap { aspect-ratio:16/9; }
+  .info-panel-body { padding:2.5rem 3rem 3rem; display:grid; grid-template-columns:1fr 1fr; gap:0 3rem; align-items:start; }
+  .info-panel-eyebrow { grid-column:1/-1; margin-bottom:0.5rem; }
+  .info-panel-title { font-size:2.6rem; grid-column:1/-1; margin-bottom:0.5rem; }
+  .info-panel-divider { grid-column:1/-1; margin-top:0.5rem; margin-bottom:1.5rem; }
+  .info-panel-desc { grid-column:1/-1; margin-bottom:2rem; }
+  .info-panel-price { font-size:2.2rem; grid-column:1; text-align:left; align-self:center; margin:0; }
   .info-panel-sold-note { grid-column:1/-1; }
-  .info-panel-btn { grid-column:1; margin-top:0; }
-  .info-panel-share { grid-column:2; margin-top:0; }
-  .info-panel-close-row { grid-column:1/-1; }
+  .info-panel-btn { grid-column:2; margin-top:0; }
+  .info-panel-share { grid-column:1/-1; margin-top:1.5rem; }
+  .info-panel-close-row { grid-column:1/-1; margin-top:1rem; }
 }
 
 @media(min-width:1025px) { .info-panel { display:none; } .info-panel-backdrop { display:none; } }
@@ -761,53 +771,50 @@ document.getElementById('info-img-wrap').onclick = function(e) {
   }, 200);
 };
 
-// APPLE-LIKE SWIPE DOWN FÜR DAS INFO PANEL (Exakt 1:1 Finger Tracking & iOS Bounce Schutz)
+// APPLE-LIKE SWIPE DOWN FÜR DAS INFO PANEL (1:1 Finger Tracking - Nur auf Mobile!)
 (function() {
   const panel = document.getElementById('info-panel');
-  let startY = 0, currentY = 0, isDragging = false, startScrollTop = 0;
+  let startY = 0, currentY = 0, isDragging = false;
 
   panel.addEventListener('touchstart', e => {
-    if (window.innerWidth > 1024) return; // Auf Tablet/PC ignorieren
-    startScrollTop = panel.scrollTop;
-    // Drag NUR erlauben, wenn man ganz oben im Info Panel ist
-    if (startScrollTop <= 0) {
-      startY = e.touches[0].clientY;
-      isDragging = true;
-      panel.style.transition = 'none'; // Verhindert Ruckeln beim Finger-Tracking
-    }
+    if (window.innerWidth > 768) return; // Auf Tablet/PC ignorieren
+    startY = e.touches[0].clientY;
+    isDragging = true;
+    panel.style.transition = 'none'; // CSS Transition entfernen, damit es exakt am Finger klebt
   }, { passive: true });
 
   panel.addEventListener('touchmove', e => {
-    if (!isDragging || window.innerWidth > 1024) return;
+    if (!isDragging || window.innerWidth > 768) return;
     currentY = e.touches[0].clientY;
     let diffY = currentY - startY;
 
-    if (diffY > 0 && startScrollTop <= 0) {
-      // Finger bewegt sich nach unten = Panel zieht mit
-      e.preventDefault(); // Blockiert das interne iOS Fenster-Bouncing!
+    if (diffY > 0) {
+      // Finger bewegt sich nach unten = panel zieht mit
       panel.style.transform = `translateY(${diffY}px)`;
     } else {
-      // Finger bewegt sich nach oben = lass das Panel normal scrollen
-      panel.style.transform = `translateY(0px)`;
+      // Finger bewegt sich nach oben = leichter Widerstand (Rubber Band Effekt)
+      const rubberBand = diffY * 0.15;
+      panel.style.transform = `translateY(${rubberBand}px)`;
     }
-  }, { passive: false }); // passive: false ist zwingend nötig für preventDefault
+  }, { passive: true });
 
   panel.addEventListener('touchend', e => {
-    if (!isDragging || window.innerWidth > 1024) return;
+    if (!isDragging || window.innerWidth > 768) return;
     isDragging = false;
+    // Weiche "Spring"-Transition wiederherstellen
     panel.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
     
     const diffY = currentY - startY;
     
-    // Wenn weit genug nach unten gewischt wurde, schließen
-    if (diffY > 80 && startScrollTop <= 0) {
+    // Wenn weit genug nach unten gewischt wurde (Threshold), schließen
+    if (diffY > 90) {
       closeInfoPanel();
     } else {
       // Ansonsten weich zurückschnappen lassen
       panel.style.transform = 'translateY(0)';
       setTimeout(() => {
         if(panel.classList.contains('open')) {
-          panel.style.transform = ''; // Säubern
+          panel.style.transform = ''; // Inline styles säubern
         }
       }, 400);
     }
