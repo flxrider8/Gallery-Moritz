@@ -520,28 +520,63 @@ let openedFromInfoPanel = false;
 // ── IMAGE COMPRESSION ENGINE ─────────────────────────────────
 const ImgPress = {
   MAX_W: 1400, MAX_H: 1050, QUALITY: 0.82,
+  // Für Grid-Thumbnails: kleinere Auflösung reicht völlig
+  GRID_MAX_W: 800, GRID_MAX_H: 600, GRID_QUALITY: 0.75,
   _cache: new Map(),
-  compress(url) {
-    if (this._cache.has(url)) return Promise.resolve(this._cache.get(url));
+
+  _compress(url, maxW, maxH, quality) {
+    const cacheKey = url + '@' + maxW;
+    if (this._cache.has(cacheKey)) return Promise.resolve(this._cache.get(cacheKey));
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
         let w = img.naturalWidth, h = img.naturalHeight;
-        if (w <= this.MAX_W && h <= this.MAX_H) { this._cache.set(url, url); resolve(url); return; }
-        const ratio = Math.min(this.MAX_W / w, this.MAX_H / h);
+        if (w <= maxW && h <= maxH) { this._cache.set(cacheKey, url); resolve(url); return; }
+        const ratio = Math.min(maxW / w, maxH / h);
         w = Math.round(w * ratio); h = Math.round(h * ratio);
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        canvas.toBlob(blob => { const objURL = URL.createObjectURL(blob); this._cache.set(url, objURL); resolve(objURL); }, 'image/jpeg', this.QUALITY);
+        canvas.toBlob(blob => {
+          const objURL = URL.createObjectURL(blob);
+          this._cache.set(cacheKey, objURL);
+          resolve(objURL);
+        }, 'image/jpeg', quality);
       };
       img.onerror = () => { resolve(url); };
       img.src = url;
     });
   },
-  applyTo(imgEl, url) { this.compress(url).then(compressed => { if (imgEl.src !== compressed) imgEl.src = compressed; }); }
+
+  // Für Lightbox / Info-Panel: volle Qualität
+  compress(url) { return this._compress(url, this.MAX_W, this.MAX_H, this.QUALITY); },
+
+  // Für Grid-Thumbnails: kleinere Version
+  compressGrid(url) { return this._compress(url, this.GRID_MAX_W, this.GRID_MAX_H, this.GRID_QUALITY); },
+
+  applyTo(imgEl, url) { this.compress(url).then(c => { if (imgEl.src !== c) imgEl.src = c; }); },
+
+  // Grid: src bleibt leer bis sichtbar, dann komprimiert laden
+  applyGridTo(imgEl, url) {
+    imgEl.dataset.src = url;
+    imgGridObserver.observe(imgEl);
+  }
 };
+
+// IntersectionObserver für Grid-Bilder: lädt+komprimiert erst wenn sichtbar
+const imgGridObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const img = e.target;
+    const url = img.dataset.src;
+    if (!url) return;
+    imgGridObserver.unobserve(img);
+    ImgPress.compressGrid(url).then(compressed => {
+      img.src = compressed;
+    });
+  });
+}, { rootMargin: '200px' }); // 200px vorher laden = kein sichtbares Nachladen
 
 function parseName(filename) {
   let base = filename.replace(/\.[^/.]+$/, '');
@@ -593,13 +628,14 @@ function renderGallery(data) {
     const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Anfragen</a>` : '';
     card.innerHTML = `
       <div class="p-wrapper">
-        <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');ImgPress.applyTo(this, this.src);"><div class="p-spot"></div></div>
+        <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
         <div class="p-info">
           <div class="p-meta"><div class="p-title">${title}</div>${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}</div>
           <div class="p-desc">${desc}</div>
           ${inquireBtn}
         </div>
       </div>`;
+    ImgPress.applyGridTo(card.querySelector('.p-img-box img'), file.download_url);
     card.onclick = () => { if (window.innerWidth <= 1024) openInfoPanel(index); else openLightboxAtIndex(index); };
     grid.appendChild(card);
     
