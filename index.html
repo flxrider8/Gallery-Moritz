@@ -849,8 +849,12 @@ document.addEventListener('keydown', function(e) {
 });
 
 (function() {
-  const lbContent = document.getElementById('lightbox').querySelector('.lb-content');
+  const lightbox = document.getElementById('lightbox');
+  const lbContent = lightbox.querySelector('.lb-content');
   if (!lbContent) return;
+  
+  lightbox.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
   lbContent.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease';
   let startX = 0, startY = 0;
   lbContent.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; startY = e.changedTouches[0].screenY; }, { passive: true });
