@@ -549,6 +549,63 @@ let displayedPaintingsData = [];
 let currentPaintingIndex = -1;
 let openedFromInfoPanel = false;
 
+
+// ── IMAGE COMPRESSION ENGINE ─────────────────────────────────
+// Komprimiert 4K-Bilder clientseitig vor der Anzeige.
+// GitHub-Workflow bleibt komplett unverändert.
+const ImgPress = {
+  // Maximale Auflösung nach Komprimierung
+  MAX_W: 1400,
+  MAX_H: 1050,
+  // JPEG-Qualität 0–1 (0.82 = guter Kompromiss Schärfe/Größe)
+  QUALITY: 0.82,
+
+  // Cache: download_url → komprimierte objectURL
+  _cache: new Map(),
+
+  compress(url) {
+    if (this._cache.has(url)) return Promise.resolve(this._cache.get(url));
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        // Skalierung berechnen
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w <= this.MAX_W && h <= this.MAX_H) {
+          // Bild ist klein genug — Original behalten
+          this._cache.set(url, url);
+          resolve(url);
+          return;
+        }
+        const ratio = Math.min(this.MAX_W / w, this.MAX_H / h);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        canvas.toBlob(blob => {
+          const objURL = URL.createObjectURL(blob);
+          this._cache.set(url, objURL);
+          resolve(objURL);
+        }, 'image/jpeg', this.QUALITY);
+      };
+      img.onerror = () => { resolve(url); }; // Fallback: Original
+      img.src = url;
+    });
+  },
+
+  // Wendet Komprimierung auf ein <img>-Element an
+  applyTo(imgEl, url) {
+    this.compress(url).then(compressed => {
+      if (imgEl.src !== compressed) imgEl.src = compressed;
+    });
+  }
+};
+// ── END IMAGE COMPRESSION ENGINE ─────────────────────────────
 function parseName(filename) {
   let base = filename.replace(/\.[^/.]+$/, '');
   const sold = /^VERKAUFT\s*-\s*/i.test(base);
@@ -594,7 +651,7 @@ function renderGallery(data) {
     const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Anfragen</a>` : '';
     card.innerHTML = `
       <div class="p-wrapper">
-        <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded')"><div class="p-spot"></div></div>
+        <div class="p-img-box">${soldBadge}<img src="${file.download_url}" alt="${title}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');ImgPress.applyTo(this, this.src);"><div class="p-spot"></div></div>
         <div class="p-info">
           <div class="p-meta"><div class="p-title">${title}</div>${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}</div>
           <div class="p-desc">${desc}</div>
@@ -616,7 +673,9 @@ async function fetchPaintings() {
     const artistImg = document.getElementById('artist-img');
     const placeholder = document.querySelector('.artist-portrait-placeholder');
     if (artistFile && artistImg) {
-      artistImg.src = artistFile.download_url;
+      ImgPress.compress(artistFile.download_url).then(url => {
+        artistImg.src = url;
+      });
       artistImg.style.display = 'block';
       if (placeholder) placeholder.style.display = 'none';
     } else {
@@ -659,7 +718,7 @@ function openLightboxAtIndex(index) {
   currentPaintingIndex = index;
   const file = displayedPaintingsData[index];
   const { title } = parseName(file.name);
-  document.getElementById('lb-img').src = file.download_url;
+  ImgPress.applyTo(document.getElementById('lb-img'), file.download_url);
   document.getElementById('lb-title').textContent = title;
   document.getElementById('lb-counter').textContent = (index + 1) + ' von ' + displayedPaintingsData.length;
   document.getElementById('lightbox').classList.add('open');
@@ -694,7 +753,7 @@ function openInfoPanel(index) {
   panel.style.transform = ''; // Clear inline styles from dragging
   panel.classList.remove('open');
   
-  document.getElementById('info-img').src = file.download_url;
+  ImgPress.applyTo(document.getElementById('info-img'), file.download_url);
   document.getElementById('info-eyebrow').textContent = desc || 'Kunstwerk';
   document.getElementById('info-title').textContent = title;
   document.getElementById('info-desc').textContent = desc;
