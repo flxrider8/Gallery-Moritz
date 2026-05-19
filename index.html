@@ -87,13 +87,17 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .sec-eye { font-size:0.62rem; letter-spacing:0.55em; text-transform:uppercase; color:var(--gold); margin-bottom:0.9rem; }
 .sec-title { font-size:clamp(2.5rem,5vw,4.2rem); font-weight:300; font-style:italic; color:var(--text); }
 .sec-line { width:55px; height:1px; background:var(--gold); margin:1.8rem auto 2.5rem; opacity:0.6; }
-.search-wrapper { margin: 0 auto 1.5rem; max-width: 400px; position: relative; width: 100%; }
+.search-wrapper { margin: 0 auto 1.5rem; max-width: 400px; position: relative; width: 100%; display: block; }
 .search-container { position: relative; width: 100%; }
 .search-icon { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); transition: color 0.4s; pointer-events: none; }
-.search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.85rem 1.2rem 0.85rem 3.2rem; font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-style: italic; font-weight: 300; border-radius: 12px; transition: border-color 0.4s, box-shadow 0.4s; outline: none; letter-spacing: 0.04em; }
+.search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.85rem 3rem 0.85rem 3.2rem; font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-style: italic; font-weight: 300; border-radius: 12px; transition: border-color 0.4s, box-shadow 0.4s; outline: none; letter-spacing: 0.04em; -webkit-appearance: none; }
 .search-input::placeholder { color: var(--muted); font-style: italic; }
 .search-input:focus { border-color: var(--gold); box-shadow: 0 0 20px rgba(200, 169, 81, 0.12); }
 .search-container:focus-within .search-icon { color: var(--gold); }
+.search-input::-webkit-search-decoration, .search-input::-webkit-search-cancel-button { display: none; }
+.search-clear { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 1.1rem; padding: 0.5rem; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.3s, color 0.3s; display: flex; align-items: center; justify-content: center; outline: none; }
+.search-clear.visible { opacity: 1; pointer-events: all; }
+.search-clear:hover { color: var(--gold); }
 
 /* PULSING TAP HINT */
 .tap-hint { text-align:center; font-size:0.55rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin: 0 auto 2.5rem; display: block; opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards, pulseGlow 2.5s infinite alternate; }
@@ -208,18 +212,24 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .info-panel.open .info-panel-share { opacity: 1; transform: translateY(0); }
 @media (hover: none) { .info-panel-share:active { transform: scale(0.96) !important; background: rgba(200,169,81,0.15); transition: transform 0.1s, background 0.1s; } }
 
-/* LIGHTBOX */
-.lightbox { position:fixed; inset:0; z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.4s; }
+/* LIGHTBOX - MODERNISIERT */
+.lightbox { position:fixed; inset:0; z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1); touch-action:none; }
 .lightbox.open { opacity:1; pointer-events:all; }
-.lb-bg { position:absolute; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; background:rgba(0,0,0,0.98); cursor:pointer; }
-.lb-close { position:absolute; top:2rem; right:2.5rem; z-index:1; background:rgba(20,19,16,0.6); backdrop-filter: blur(10px); border:none; border-radius: 50%; color:var(--muted); width:44px; height:44px; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:all 0.25s; }
+.lb-bg { position:absolute; inset:-50vh -50vw; background:rgba(7,7,6,0.98); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); cursor:pointer; transition: opacity 0.4s; }
+.lb-close { position:absolute; top:2rem; right:2.5rem; z-index:10; background:rgba(20,19,16,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid rgba(200,169,81,0.2); border-radius: 50%; color:var(--text); width:44px; height:44px; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:all 0.25s; }
 .lb-close:active { transform: scale(0.9); }
-.lb-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:1.8rem; transform:scale(0.95); transition:transform 0.5s cubic-bezier(0.2,0.8,0.2,1); max-width:90vw; max-height:90vh; }
-.lightbox.open .lb-content { transform:scale(1); }
-.lb-content img { max-width:100%; max-height:75vh; object-fit:contain; border:2px solid var(--gold); border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-.lb-title { font-size:1.55rem; font-style:italic; letter-spacing:0.05em; color:var(--text); }
-.lb-counter { font-size:0.6rem; letter-spacing:0.4em; color:var(--muted); text-transform:uppercase; font-family:'Cinzel',serif; }
-
+@media (hover: hover) { .lb-close:hover { background:rgba(20,19,16,0.9); color: var(--gold); border-color: var(--gold); } }
+.lb-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; width: 100vw; height: 100vh; transform:scale(0.96); opacity:0; transition:transform 0.5s cubic-bezier(0.32,0.72,0,1), opacity 0.5s ease; will-change: transform; cursor: pointer; }
+.lightbox.open .lb-content { transform:translate3d(0,0,0) scale(1); opacity:1; }
+.lb-content img { max-width:90vw; max-height:80vh; object-fit:contain; border-radius: 8px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); user-select: none; pointer-events: none; }
+.lb-info-bar { position:absolute; bottom: 2rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; z-index: 10; pointer-events: none; text-align: center; }
+.lb-title { font-size:1.4rem; font-style:italic; letter-spacing:0.05em; color:var(--text); text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+.lb-counter { font-size:0.65rem; letter-spacing:0.4em; color:var(--muted); text-transform:uppercase; font-family:'Cinzel',serif; }
+.lb-arrow { position:absolute; top:50%; transform:translateY(-50%); z-index:10; background:rgba(20,19,16,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid rgba(200,169,81,0.15); color:var(--text); width:50px; height:50px; border-radius:50%; font-size:1.5rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s; }
+.lb-arrow:active { transform: translateY(-50%) scale(0.9); }
+@media (hover: hover) { .lb-arrow:hover { background:rgba(20,19,16,0.9); color:var(--gold); border-color:var(--gold); } }
+.lb-prev { left: 2.5rem; }
+.lb-next { right: 2.5rem; }
 
 /* --- MOBILE LAYOUT UPDATES --- */
 @media(max-width:768px) { 
@@ -251,9 +261,10 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   .contact-sec { padding:4rem 1.5rem 6rem; }
   .contact-grid { grid-template-columns:1fr 1fr; gap:2.5rem 1.2rem; }
   .main-footer { flex-direction:column; gap:1rem; text-align:center; padding:2.5rem 1.5rem; }
-  .lb-content { max-width:95vw; }
-  .lb-content img { max-height:65vh; border-width: 1px; }
-  .lb-close { top:1rem; right:1rem; width: 36px; height: 36px; }
+  
+  .lb-content img { max-width:95vw; max-height:75vh; }
+  .lb-close { top:1rem; right:1rem; width: 40px; height: 40px; background: rgba(20,19,16,0.75); }
+  .lb-info-bar { bottom: 1.5rem; }
 }
 
 @media(min-width:769px) and (max-width:1024px) {
@@ -361,12 +372,16 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     <div class="sec-eye">Kollektion</div>
     <h2 class="sec-title">Ausgewählte Werke</h2>
     <div class="sec-line"></div>
-    <div class="search-wrapper">
+    
+    <!-- ÄNDERUNG 1 & 2: Search Bar in einer <form> und mit "X" Button -->
+    <form class="search-wrapper" id="search-form" action="javascript:void(0);">
       <div class="search-container">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="gallery-search" class="search-input" placeholder="Werke durchsuchen..." autocomplete="off" aria-label="Werke durchsuchen">
+        <input type="search" id="gallery-search" class="search-input" placeholder="Werke durchsuchen..." autocomplete="off" aria-label="Werke durchsuchen">
+        <button type="button" class="search-clear" id="search-clear" aria-label="Suche löschen">✕</button>
       </div>
-    </div>
+    </form>
+    
     <div id="gallery-count" style="font-size:0.62rem;letter-spacing:0.4em;color:var(--muted);text-transform:uppercase;font-family:'Cinzel',serif;opacity:0;transition:opacity 0.4s;margin-top:0.5rem;"></div>
   </section>
 
@@ -480,6 +495,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   <div class="lb-content"><img id="artist-lb-img" src=""></div>
 </div>
 
+<!-- ÄNDERUNG 3: Moderne Lightbox HTML Struktur -->
 <div class="lightbox" id="lightbox">
   <div class="lb-bg" id="lb-bg"></div>
   <button class="lb-close" id="lb-close">✕</button>
@@ -487,8 +503,10 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   <button class="lb-arrow lb-next" id="lb-next">›</button>
   <div class="lb-content">
     <img id="lb-img" src="">
-    <div class="lb-title" id="lb-title"></div>
-    <div class="lb-counter" id="lb-counter"></div>
+    <div class="lb-info-bar">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-counter" id="lb-counter"></div>
+    </div>
   </div>
 </div>
 
@@ -615,10 +633,16 @@ async function fetchPaintings() {
   }
 }
 
+// ÄNDERUNG: Search-Funktion um X Button und "Enter"-Verhalten erweitert
 const searchInput = document.getElementById('gallery-search');
+const searchClear = document.getElementById('search-clear');
+const searchForm = document.getElementById('search-form');
+
 if(searchInput) {
   searchInput.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase().trim();
+    if(searchClear) searchClear.classList.toggle('visible', query.length > 0);
+    
     if(!query) renderGallery(allPaintingsData);
     else {
       renderGallery(allPaintingsData.filter(f => {
@@ -627,6 +651,21 @@ if(searchInput) {
       }));
     }
   });
+
+  if(searchClear) {
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchInput.dispatchEvent(new Event('input'));
+      searchInput.focus();
+    });
+  }
+
+  if(searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      searchInput.blur(); // Tastatur am Handy wird geschlossen
+    });
+  }
 }
 
 function openLightboxAtIndex(index) {
@@ -658,6 +697,12 @@ const closeLightbox = () => {
 
 document.getElementById('lb-close').onclick = closeLightbox;
 document.getElementById('lb-bg').onclick = closeLightbox;
+
+// NEU HINZUGEFÜGT: Erlaubt das Schließen der Lightbox beim Klick auf den leeren Hintergrund (.lb-content ist 100vw/100vh groß)
+document.querySelector('#lightbox .lb-content').onclick = function(e) {
+  if (e.target === this) closeLightbox();
+};
+
 document.getElementById('lb-prev').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex - 1); };
 document.getElementById('lb-next').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex + 1); };
 
@@ -799,6 +844,14 @@ document.getElementById('artist-img').onclick = function() {
 document.getElementById('artist-lb-bg').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 document.getElementById('artist-lb-close').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 
+// NEU HINZUGEFÜGT: Erlaubt das Schließen der Künstler-Lightbox beim Klick auf den leeren Hintergrund
+document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
+  if (e.target === this) {
+    document.getElementById('artist-lightbox').classList.remove('open'); 
+    document.body.style.overflow = '';
+  }
+};
+
 /* --- NEUES BURGER MENÜ JS LOGIK --- */
 (function(){
   const burger = document.getElementById('nav-hamburger');
@@ -848,37 +901,95 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// ÄNDERUNG 3: Modernes, flüssiges Touch-Swipe-Verhalten der Vollbildansicht (Lightbox)
 (function() {
   const lightbox = document.getElementById('lightbox');
   const lbContent = lightbox.querySelector('.lb-content');
-  if (!lbContent) return;
+  const lbBg = document.getElementById('lb-bg');
+  if (!lbContent || !lbBg) return;
   
   lightbox.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
-  lbContent.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease';
-  let startX = 0, startY = 0;
-  lbContent.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; startY = e.changedTouches[0].screenY; }, { passive: true });
+  let startX = 0, startY = 0, currentX = 0, currentY = 0, isDragging = false;
+  let startTime = 0;
+
+  lbContent.addEventListener('touchstart', e => { 
+    startX = e.changedTouches[0].clientX; 
+    startY = e.changedTouches[0].clientY; 
+    isDragging = true;
+    startTime = Date.now();
+    lbContent.style.transition = 'none'; 
+    lbBg.style.transition = 'none';
+  }, { passive: true });
+
+  lbContent.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    currentX = e.changedTouches[0].clientX - startX;
+    currentY = e.changedTouches[0].clientY - startY;
+    
+    // Leichter Widerstand wenn man nach oben zieht, normales Verhalten nach unten
+    const resistanceY = currentY > 0 ? currentY * 0.9 : currentY * 0.4;
+    
+    lbContent.style.transform = `translate3d(${currentX}px, ${resistanceY}px, 0) scale(${1 - Math.abs(resistanceY)*0.0003})`;
+    
+    // Hintergrund wird beim Runterziehen durchsichtig
+    const fadeProgress = Math.max(0, 1 - Math.abs(currentY) / (window.innerHeight * 0.7));
+    lbBg.style.opacity = fadeProgress;
+  }, { passive: true });
+
   lbContent.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].screenX - startX;
-    const dy = e.changedTouches[0].screenY - startY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      const next = dx < 0 ? currentPaintingIndex + 1 : currentPaintingIndex - 1;
+    if (!isDragging) return;
+    isDragging = false;
+    
+    const timeElapsed = Date.now() - startTime;
+    const velocityX = Math.abs(currentX) / timeElapsed;
+    const velocityY = Math.abs(currentY) / timeElapsed;
+
+    lbContent.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s';
+    lbBg.style.transition = 'opacity 0.4s';
+
+    // Wischen nach unten (Schließen)
+    if (currentY > 120 || (currentY > 50 && velocityY > 0.5)) {
+      lbContent.style.transform = `translate3d(${currentX}px, 100vh, 0) scale(0.9)`;
+      closeLightbox();
+      setTimeout(() => { resetLightboxTransform(); }, 400);
+      return;
+    }
+
+    // Wischen nach Links / Rechts (Bildwechsel)
+    if (Math.abs(currentX) > 80 || velocityX > 0.5) {
+      const next = currentX < 0 ? currentPaintingIndex + 1 : currentPaintingIndex - 1;
       if (next >= 0 && next < displayedPaintingsData.length) {
+        const direction = currentX < 0 ? -window.innerWidth : window.innerWidth;
+        lbContent.style.transform = `translate3d(${direction}px, 0, 0) scale(0.95)`;
         lbContent.style.opacity = '0';
-        lbContent.style.transform = `translateX(${dx < 0 ? '-30px' : '30px'}) scale(0.95)`;
+        
         setTimeout(() => {
           openLightboxAtIndex(next);
-          lbContent.style.transform = `translateX(${dx < 0 ? '30px' : '-30px'}) scale(0.95)`;
+          lbContent.style.transition = 'none';
+          lbContent.style.transform = `translate3d(${-direction}px, 0, 0) scale(0.95)`;
+          
           requestAnimationFrame(() => {
-            setTimeout(() => { lbContent.style.opacity = '1'; lbContent.style.transform = 'translateX(0) scale(1)'; }, 20);
+            requestAnimationFrame(() => {
+              lbContent.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s';
+              resetLightboxTransform();
+            });
           });
         }, 200);
         return;
       }
     }
-    lbContent.style.transform = 'translateX(0) scale(1)';
-    lbContent.style.opacity = '1';
+
+    // Wenn Wischen nicht stark genug war -> zurückfedern in die Mitte
+    resetLightboxTransform();
   }, { passive: true });
+
+  function resetLightboxTransform() {
+    lbContent.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    lbContent.style.opacity = '1';
+    lbBg.style.opacity = '1';
+    currentX = 0; currentY = 0;
+  }
 })();
 
 function initParticles() {
