@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23070706'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23c8a951' font-family='serif' font-weight='bold' font-size='18'%3EM%3C/text%3E%3C/svg%3E">
 <meta charset="UTF-8">
-<meta name="theme-color" content="#000000">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Moritz Gallery | Kunst & Atelier Wien</title>
-<meta name="description" content="Fine Art Gallery von Moritz Geberth. Entdecken Sie ausgewählte, zeitlose Kunstwerke in Öl und Acryl.">
+
+<!-- ==========================================
+     START: LUXURY OPEN GRAPH & META TAGS
+     ========================================== -->
+<title>Moritz Gallery | Fine Art & Atelier Wien</title>
+<meta name="description" content="Exklusive, zeitlose Kunstwerke in Öl und Acryl von Moritz Geberth. Entdecken Sie eine kuratierte Fine Art Kollektion für moderne Ästhetik.">
+<meta name="author" content="Moritz Geberth">
+<meta name="theme-color" content="#070706">
+
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://moritzgallery.at/">
+<meta property="og:title" content="Moritz Gallery | Fine Art & Atelier Wien">
+<meta property="og:description" content="Exklusive, zeitlose Kunstwerke in Öl und Acryl von Moritz Geberth. Entdecken Sie eine kuratierte Fine Art Kollektion für moderne Ästhetik.">
+<meta property="og:image" content="https://raw.githubusercontent.com/flxrider8/Gallery-Moritz/main/portfolio/apple-touch-icon.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Moritz Gallery">
+<meta property="og:locale" content="de_AT">
+
+<!-- Twitter / Discord / Snapchat / Telegram -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://moritzgallery.at/">
+<meta name="twitter:title" content="Moritz Gallery | Fine Art & Atelier Wien">
+<meta name="twitter:description" content="Exklusive, zeitlose Kunstwerke in Öl und Acryl von Moritz Geberth. Entdecken Sie eine kuratierte Fine Art Kollektion für moderne Ästhetik.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/flxrider8/Gallery-Moritz/main/portfolio/apple-touch-icon.png">
+
+<!-- Apple / iOS Spezifisch -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Moritz Art">
+<!-- ==========================================
+     ENDE: LUXURY OPEN GRAPH & META TAGS
+     ========================================== -->
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23070706'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23c8a951' font-family='serif' font-weight='bold' font-size='18'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23070706'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23c8a951' font-family='serif' font-weight='bold' font-size='110'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
@@ -373,7 +405,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     <h2 class="sec-title">Ausgewählte Werke</h2>
     <div class="sec-line"></div>
     
-    <!-- ÄNDERUNG 1 & 2: Search Bar in einer <form> und mit "X" Button -->
     <form class="search-wrapper" id="search-form" action="javascript:void(0);">
       <div class="search-container">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -464,7 +495,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     </div>
   </div>
   <div class="info-panel-body">
-    <div class="info-panel-eyebrow" id="info-eyebrow"></div>
+    <div class="info-panel-eyebrow" id="info-eyebrow">Bild antippen für Vollbild</div>
     <div class="info-panel-title" id="info-title"></div>
     <div class="info-panel-divider"></div>
     <div class="info-panel-desc" id="info-desc"></div>
@@ -495,7 +526,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   <div class="lb-content"><img id="artist-lb-img" src=""></div>
 </div>
 
-<!-- ÄNDERUNG 3: Moderne Lightbox HTML Struktur -->
 <div class="lightbox" id="lightbox">
   <div class="lb-bg" id="lb-bg"></div>
   <button class="lb-close" id="lb-close">✕</button>
@@ -517,10 +547,8 @@ let displayedPaintingsData = [];
 let currentPaintingIndex = -1;
 let openedFromInfoPanel = false;
 
-// ── IMAGE COMPRESSION ENGINE ─────────────────────────────────
 const ImgPress = {
   MAX_W: 1400, MAX_H: 1050, QUALITY: 0.82,
-  // Für Grid-Thumbnails: kleinere Auflösung reicht völlig
   GRID_MAX_W: 800, GRID_MAX_H: 600, GRID_QUALITY: 0.75,
   _cache: new Map(),
 
@@ -548,23 +576,15 @@ const ImgPress = {
       img.src = url;
     });
   },
-
-  // Für Lightbox / Info-Panel: volle Qualität
   compress(url) { return this._compress(url, this.MAX_W, this.MAX_H, this.QUALITY); },
-
-  // Für Grid-Thumbnails: kleinere Version
   compressGrid(url) { return this._compress(url, this.GRID_MAX_W, this.GRID_MAX_H, this.GRID_QUALITY); },
-
   applyTo(imgEl, url) { this.compress(url).then(c => { if (imgEl.src !== c) imgEl.src = c; }); },
-
-  // Grid: src bleibt leer bis sichtbar, dann komprimiert laden
   applyGridTo(imgEl, url) {
     imgEl.dataset.src = url;
     imgGridObserver.observe(imgEl);
   }
 };
 
-// IntersectionObserver für Grid-Bilder: lädt+komprimiert erst wenn sichtbar
 const imgGridObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (!e.isIntersecting) return;
@@ -576,7 +596,7 @@ const imgGridObserver = new IntersectionObserver((entries) => {
       img.src = compressed;
     });
   });
-}, { rootMargin: '200px' }); // 200px vorher laden = kein sichtbares Nachladen
+}, { rootMargin: '200px' }); 
 
 function parseName(filename) {
   let base = filename.replace(/\.[^/.]+$/, '');
@@ -669,7 +689,6 @@ async function fetchPaintings() {
   }
 }
 
-// ÄNDERUNG: Search-Funktion um X Button und "Enter"-Verhalten erweitert
 const searchInput = document.getElementById('gallery-search');
 const searchClear = document.getElementById('search-clear');
 const searchForm = document.getElementById('search-form');
@@ -699,7 +718,7 @@ if(searchInput) {
   if(searchForm) {
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      searchInput.blur(); // Tastatur am Handy wird geschlossen
+      searchInput.blur();
     });
   }
 }
@@ -734,7 +753,6 @@ const closeLightbox = () => {
 document.getElementById('lb-close').onclick = closeLightbox;
 document.getElementById('lb-bg').onclick = closeLightbox;
 
-// NEU HINZUGEFÜGT: Erlaubt das Schließen der Lightbox beim Klick auf den leeren Hintergrund (.lb-content ist 100vw/100vh groß)
 document.querySelector('#lightbox .lb-content').onclick = function(e) {
   if (e.target === this) closeLightbox();
 };
@@ -751,7 +769,7 @@ function openInfoPanel(index) {
   panel.classList.remove('open');
   
   ImgPress.applyTo(document.getElementById('info-img'), file.download_url);
-  document.getElementById('info-eyebrow').textContent = desc || 'Kunstwerk';
+  
   document.getElementById('info-title').textContent = title;
   document.getElementById('info-desc').textContent = desc;
   const priceEl = document.getElementById('info-price');
@@ -880,7 +898,6 @@ document.getElementById('artist-img').onclick = function() {
 document.getElementById('artist-lb-bg').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 document.getElementById('artist-lb-close').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 
-// NEU HINZUGEFÜGT: Erlaubt das Schließen der Künstler-Lightbox beim Klick auf den leeren Hintergrund
 document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
   if (e.target === this) {
     document.getElementById('artist-lightbox').classList.remove('open'); 
@@ -888,7 +905,6 @@ document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
   }
 };
 
-/* --- NEUES BURGER MENÜ JS LOGIK --- */
 (function(){
   const burger = document.getElementById('nav-hamburger');
   const drawer = document.getElementById('nav-drawer');
@@ -919,7 +935,7 @@ document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
       setTimeout(() => {
         window.location.href = targetId;
         history.pushState('', document.title, window.location.pathname + window.location.search);
-      }, 350); // Warten bis Animation halb fertig ist bevor gescrollt wird
+      }, 350); 
     });
   });
 })();
@@ -937,7 +953,6 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// ÄNDERUNG 3: Modernes, flüssiges Touch-Swipe-Verhalten der Vollbildansicht (Lightbox)
 (function() {
   const lightbox = document.getElementById('lightbox');
   const lbContent = lightbox.querySelector('.lb-content');
@@ -963,12 +978,10 @@ document.addEventListener('keydown', function(e) {
     currentX = e.changedTouches[0].clientX - startX;
     currentY = e.changedTouches[0].clientY - startY;
     
-    // Leichter Widerstand wenn man nach oben zieht, normales Verhalten nach unten
     const resistanceY = currentY > 0 ? currentY * 0.9 : currentY * 0.4;
     
     lbContent.style.transform = `translate3d(${currentX}px, ${resistanceY}px, 0) scale(${1 - Math.abs(resistanceY)*0.0003})`;
     
-    // Hintergrund wird beim Runterziehen durchsichtig
     const fadeProgress = Math.max(0, 1 - Math.abs(currentY) / (window.innerHeight * 0.7));
     lbBg.style.opacity = fadeProgress;
   }, { passive: true });
@@ -984,7 +997,6 @@ document.addEventListener('keydown', function(e) {
     lbContent.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s';
     lbBg.style.transition = 'opacity 0.4s';
 
-    // Wischen nach unten (Schließen)
     if (currentY > 120 || (currentY > 50 && velocityY > 0.5)) {
       lbContent.style.transform = `translate3d(${currentX}px, 100vh, 0) scale(0.9)`;
       closeLightbox();
@@ -992,7 +1004,6 @@ document.addEventListener('keydown', function(e) {
       return;
     }
 
-    // Wischen nach Links / Rechts (Bildwechsel)
     if (Math.abs(currentX) > 80 || velocityX > 0.5) {
       const next = currentX < 0 ? currentPaintingIndex + 1 : currentPaintingIndex - 1;
       if (next >= 0 && next < displayedPaintingsData.length) {
@@ -1016,7 +1027,6 @@ document.addEventListener('keydown', function(e) {
       }
     }
 
-    // Wenn Wischen nicht stark genug war -> zurückfedern in die Mitte
     resetLightboxTransform();
   }, { passive: true });
 
