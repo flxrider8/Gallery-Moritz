@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -78,7 +77,7 @@ body { background: #000; color: var(--text); font-family: 'Cormorant Garamond', 
 }
 @media(min-width:1025px) { .content-pushed { transform: none; border-radius: 0; filter: none; pointer-events: all; } }
 
-/* NAV - WIEDER IM ORIGINALZUSTAND FÜR DESKTOP */
+/* NAV */
 nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:1.6rem 4rem; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom,rgba(7,7,6,0.9) 0%,transparent 100%); transition:background 0.4s; }
 nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border); }
 nav.nav-open { background: transparent !important; border-bottom: none !important; }
@@ -142,7 +141,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .gallery-wrap { padding:0 4rem 9rem; max-width:1700px; margin:0 auto; }
 .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:5rem 4rem; }
 
-/* PAINTING CARD - Physisches Touch Feedback */
+/* PAINTING CARD */
 .pcard { position:relative; opacity:0; transform:translateY(60px) scale(0.95); transition:opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .pcard.visible { opacity:1; transform:translateY(0) scale(1); }
 .p-wrapper { position:relative; display:block; cursor:pointer; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
@@ -199,23 +198,44 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .foot-logo { font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.35em; color:var(--gold); }
 .foot-text { font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); }
 
-/* APP-LIKE BOTTOM SHEET (INFO PANEL) */
-.info-panel { 
-  position:fixed; bottom: -50vh; left:0; right:0; padding-bottom: 50vh; z-index:800; 
+/* =============================================
+   INFO PANEL — 85svh, scrollbar, iOS-safe
+   ============================================= */
+.info-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 800;
+  /* Fallback für ältere Browser */
+  height: 85vh;
+  /* svh = "small viewport height" → ignoriert iOS Safari Toolbar → kein Flickering */
+  height: 85svh;
+  overflow: hidden; /* Panel selbst scrollt NICHT – nur inner */
   background: rgba(20, 19, 16, 0.85);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border-top: 1px solid rgba(200,169,81,0.25); 
+  border-top: 1px solid rgba(200,169,81,0.25);
   border-radius: 32px 32px 0 0;
-  transform: translateY(100%); 
-  transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1); 
-  touch-action: none;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .info-panel.open { transform: translateY(0); }
+
+/* Innerer Scroll-Container */
+.info-panel-inner {
+  height: calc(100% - 27px); /* 27px = Handle-Bereich */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain; /* verhindert, dass iOS die Seite dahinter scrollt */
+  /* Safe-Area für iPhone Home-Indicator */
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
 .info-panel-backdrop { position:fixed; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; z-index:799; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:opacity 0.5s ease; }
 .info-panel-backdrop.open { opacity:1; pointer-events:all; }
 
-.info-panel-handle { width:44px; height:5px; background:rgba(200,169,81,0.3); border-radius:3px; margin:1rem auto; }
+.info-panel-handle { width:44px; height:5px; background:rgba(200,169,81,0.3); border-radius:3px; margin:1rem auto; flex-shrink: 0; }
 .info-panel-img-wrap { width: calc(100% - 2rem); margin: 0 auto; aspect-ratio:4/3; overflow:hidden; position:relative; cursor:pointer; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
 .info-panel-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; border:4px solid var(--gold); border-radius: 12px; box-sizing:border-box; }
 .info-panel-x { position:absolute; top:0.8rem; right:0.8rem; z-index:10; width:36px; height:36px; background:rgba(7,7,6,0.6); border:none; color:var(--text); font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius: 50%; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition: transform 0.2s; }
@@ -235,7 +255,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .info-panel.open .info-panel-price { opacity:1; transform:translateY(0); }
 .info-panel-price.sold { color:var(--muted); text-decoration:line-through; opacity:0.5 !important; }
 
-/* Buttons im Panel */
 .info-panel-btn { display:block; width:100%; padding:1.2rem; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--black); background:linear-gradient(135deg, var(--gold-l), var(--gold-d)); border:none; border-radius: 12px; text-decoration:none; text-align:center; cursor:pointer; opacity:0; transform:translateY(15px); transition:opacity 0.4s 0.5s, transform 0.4s 0.5s, filter 0.3s; box-shadow: 0 10px 20px rgba(200,169,81,0.2); }
 .info-panel.open .info-panel-btn { opacity:1; transform:translateY(0); }
 @media (hover: none) { .info-panel-btn:active { transform: scale(0.96) !important; transition: transform 0.1s !important; } }
@@ -245,7 +264,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .info-panel.open .info-panel-share { opacity: 1; transform: translateY(0); }
 @media (hover: none) { .info-panel-share:active { transform: scale(0.96) !important; background: rgba(200,169,81,0.15); transition: transform 0.1s, background 0.1s; } }
 
-/* LIGHTBOX - MODERNISIERT */
+/* LIGHTBOX */
 .lightbox { position:fixed; inset:0; z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1); touch-action:none; }
 .lightbox.open { opacity:1; pointer-events:all; }
 .lb-bg { position:absolute; inset:-50vh -50vw; background:rgba(7,7,6,0.98); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); cursor:pointer; transition: opacity 0.4s; }
@@ -265,19 +284,19 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .lb-next { right: 2.5rem; }
 
 /* --- MOBILE LAYOUT UPDATES --- */
-@media(max-width:768px) { 
-  .gallery-grid { gap:3.5rem !important; grid-template-columns: 1fr; } 
-  .p-img-box { border-width:8px !important; border-radius: 2px; } 
-  .p-title { font-size:1.2rem !important; } 
+@media(max-width:768px) {
+  .gallery-grid { gap:3.5rem !important; grid-template-columns: 1fr; }
+  .p-img-box { border-width:8px !important; border-radius: 2px; }
+  .p-title { font-size:1.2rem !important; }
   .lb-arrow { display:none; }
-  
+
   nav { padding:1.2rem 1.5rem; padding-top:calc(env(safe-area-inset-top,0px) + 1.2rem); background:#070706; border-bottom:none; }
   nav.scrolled { padding:0.9rem 1.5rem; padding-top:calc(env(safe-area-inset-top,0px) + 0.9rem); background:#070706; border-bottom:1px solid var(--border); }
   nav.nav-open { background: transparent !important; border-bottom: none !important; }
-  
+
   .nav-links { display:none; }
   .nav-hamburger { display:flex !important; }
-  
+
   .hero-title { font-size:clamp(3.5rem, 16vw, 6rem); line-height: 1; }
   .title-break { display: block; margin-top: -0.1em; margin-left: 0 !important; }
   .hero-eyebrow { font-size:0.5rem; gap: 0.8rem; margin-bottom: 2rem; }
@@ -294,7 +313,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   .contact-sec { padding:4rem 1.5rem 6rem; }
   .contact-grid { grid-template-columns:1fr 1fr; gap:2.5rem 1.2rem; }
   .main-footer { flex-direction:column; gap:1rem; text-align:center; padding:2.5rem 1.5rem; }
-  
+
   .lb-content img { max-width:95vw; max-height:75vh; }
   .lb-close { top:1rem; right:1rem; width: 40px; height: 40px; background: rgba(20,19,16,0.75); }
   .lb-info-bar { bottom: 1.5rem; }
@@ -302,8 +321,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 
 @media(min-width:769px) and (max-width:1024px) {
   .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
-  .info-panel { left:0; right:0; max-width:100%; transform:translateY(100%); border-radius: 40px 40px 0 0; }
-  .info-panel.open { transform:translateY(0); }
+  .info-panel { left:0; right:0; max-width:100%; border-radius: 40px 40px 0 0; }
   .info-panel-img-wrap { aspect-ratio:16/9; max-height: 45vh; border-radius: 16px; }
   .info-panel-body { padding:2rem 3rem 4rem; display:grid; grid-template-columns:1fr 1fr; gap:0 3rem; align-items:start; }
   .info-panel-eyebrow { grid-column:1/-1; }
@@ -325,20 +343,20 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
 .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
 
-/* --- LUXURY FULLSCREEN BURGER MENU (NEU) --- */
-.nav-drawer { 
+/* --- FULLSCREEN BURGER MENU --- */
+.nav-drawer {
   position:fixed; inset:0; width:100%; height:100vh;
   background:rgba(10,9,7,0.85); backdrop-filter:blur(25px) saturate(180%); -webkit-backdrop-filter:blur(25px) saturate(180%);
-  z-index:150; /* Unterhalb der Navbar, aber über dem Rest */
+  z-index:150;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
   opacity:0; pointer-events:none;
-  transform:scale(1.05); /* Leichter Zoom Out beim Öffnen */
+  transform:scale(1.05);
   transition:opacity 0.5s ease, transform 0.5s ease;
 }
 .nav-drawer.open { opacity:1; pointer-events:all; transform:scale(1); }
 .drawer-link {
   font-family:'Cinzel',serif; font-size:2.2rem; letter-spacing:0.15em; color:var(--text); text-decoration:none; text-transform:uppercase;
-  opacity:0; transform:translateY(20px); 
+  opacity:0; transform:translateY(20px);
   transition:transform 0.4s ease, opacity 0.4s ease, color 0.3s;
 }
 .nav-drawer.open .drawer-link:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.15s; }
@@ -362,7 +380,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 </head>
 <body>
 
-<!-- WICHTIG: Navbar und Menü liegen jetzt außerhalb des main-wrappers -->
 <nav id="main-nav">
   <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>{history.pushState('',document.title,window.location.pathname+window.location.search);},400);">ATELIER</div>
   <ul class="nav-links">
@@ -372,13 +389,11 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- Das NEUE bildschirmfüllende Luxus-Menü -->
 <div class="nav-drawer" id="nav-drawer">
   <a href="#about" class="drawer-link">Künstler</a>
   <a href="#contact" class="drawer-link">Kontakt</a>
 </div>
 
-<!-- Der Main-Wrapper hält alles, was vom 3D Effekt verkleinert wird -->
 <div id="main-wrapper">
   <header class="hero">
     <div class="hero-bg"></div>
@@ -406,7 +421,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     <div class="sec-eye">Kollektion</div>
     <h2 class="sec-title">Ausgewählte Werke</h2>
     <div class="sec-line"></div>
-    
+
     <form class="search-wrapper" id="search-form" action="javascript:void(0);">
       <div class="search-container">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -414,7 +429,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
         <button type="button" class="search-clear" id="search-clear" aria-label="Suche löschen">✕</button>
       </div>
     </form>
-    
+
     <div id="gallery-count" style="font-size:0.62rem;letter-spacing:0.4em;color:var(--muted);text-transform:uppercase;font-family:'Cinzel',serif;opacity:0;transition:opacity 0.4s;margin-top:0.5rem;"></div>
   </section>
 
@@ -449,7 +464,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
         </div>
       </div>
     </div>
-</section>
+  </section>
 
   <section class="contact-sec" id="contact">
     <div class="sec-eye">Kontakt</div>
@@ -491,28 +506,31 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   </footer>
 </div> <!-- END MAIN WRAPPER -->
 
-<!-- fixed Modals & Panels -->
 <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Nach oben">↑</button>
 
 <div class="info-panel-backdrop" id="info-backdrop"></div>
+
+<!-- INFO PANEL — Handle außen, alles andere im scrollbaren Inner-Div -->
 <div class="info-panel" id="info-panel">
   <div class="info-panel-handle"></div>
-  <div class="info-panel-img-wrap" id="info-img-wrap">
-    <img id="info-img" src="" alt="">
-    <button class="info-panel-x" id="info-panel-x" onclick="event.stopPropagation(); closeInfoPanel();">✕</button>
-    <div class="info-img-expand-hint">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M15 3h6m0 0v6m0-6l-7 7M9 21H3m0 0v-6m0 6l7-7"/></svg>
+  <div class="info-panel-inner" id="info-panel-inner">
+    <div class="info-panel-img-wrap" id="info-img-wrap">
+      <img id="info-img" src="" alt="">
+      <button class="info-panel-x" id="info-panel-x" onclick="event.stopPropagation(); closeInfoPanel();">✕</button>
+      <div class="info-img-expand-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M15 3h6m0 0v6m0-6l-7 7M9 21H3m0 0v-6m0 6l7-7"/></svg>
+      </div>
     </div>
-  </div>
-  <div class="info-panel-body">
-    <div class="info-panel-eyebrow" id="info-eyebrow">Bild antippen für Vollbild</div>
-    <div class="info-panel-title" id="info-title"></div>
-    <div class="info-panel-divider"></div>
-    <div class="info-panel-desc" id="info-desc"></div>
-    <div class="info-panel-price" id="info-price"></div>
-    <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
-    <a class="info-panel-btn" id="info-btn" href="#">Noch verfügbar?</a>
-    <button class="info-panel-share" id="info-share-btn" onclick="shareInfoPanel()">↑ &nbsp; Teilen</button>
+    <div class="info-panel-body">
+      <div class="info-panel-eyebrow" id="info-eyebrow">Bild antippen für Vollbild</div>
+      <div class="info-panel-title" id="info-title"></div>
+      <div class="info-panel-divider"></div>
+      <div class="info-panel-desc" id="info-desc"></div>
+      <div class="info-panel-price" id="info-price"></div>
+      <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
+      <a class="info-panel-btn" id="info-btn" href="#">Noch verfügbar?</a>
+      <button class="info-panel-share" id="info-share-btn" onclick="shareInfoPanel()">↑ &nbsp; Teilen</button>
+    </div>
   </div>
 </div>
 
@@ -606,7 +624,7 @@ const imgGridObserver = new IntersectionObserver((entries) => {
       img.src = compressed;
     });
   });
-}, { rootMargin: '200px' }); 
+}, { rootMargin: '200px' });
 
 function parseName(filename) {
   let base = filename.replace(/\.[^/.]+$/, '');
@@ -655,7 +673,6 @@ function renderGallery(data) {
     const card = document.createElement('div');
     card.className = 'pcard' + (sold ? ' sold' : '');
     const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
-    // Button Text geändert zu "Noch verfügbar?"
     const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?">Noch verfügbar?</a>` : '';
     card.innerHTML = `
       <div class="p-wrapper">
@@ -669,7 +686,7 @@ function renderGallery(data) {
     ImgPress.applyGridTo(card.querySelector('.p-img-box img'), file.download_url);
     card.onclick = () => { if (window.innerWidth <= 1024) openInfoPanel(index); else openLightboxAtIndex(index); };
     grid.appendChild(card);
-    
+
     if (index < 4) card.style.transitionDelay = `${index * 0.1}s`;
     scrollObserver.observe(card);
   });
@@ -708,7 +725,6 @@ if(searchInput) {
   searchInput.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase().trim();
     if(searchClear) searchClear.classList.toggle('visible', query.length > 0);
-    
     if(!query) renderGallery(allPaintingsData);
     else {
       renderGallery(allPaintingsData.filter(f => {
@@ -763,11 +779,9 @@ const closeLightbox = () => {
 
 document.getElementById('lb-close').onclick = closeLightbox;
 document.getElementById('lb-bg').onclick = closeLightbox;
-
 document.querySelector('#lightbox .lb-content').onclick = function(e) {
   if (e.target === this) closeLightbox();
 };
-
 document.getElementById('lb-prev').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex - 1); };
 document.getElementById('lb-next').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex + 1); };
 
@@ -776,18 +790,22 @@ function openInfoPanel(index) {
   const file = displayedPaintingsData[index];
   const { sold, title, desc, priceDisplay } = parseName(file.name);
   const panel = document.getElementById('info-panel');
-  panel.style.transform = ''; 
+  const inner = document.getElementById('info-panel-inner');
+  panel.style.transform = '';
   panel.classList.remove('open');
-  
+
+  // Inner-Scroll wieder nach oben setzen
+  if (inner) inner.scrollTop = 0;
+
   ImgPress.applyTo(document.getElementById('info-img'), file.download_url);
-  
+
   document.getElementById('info-title').textContent = title;
   document.getElementById('info-desc').textContent = desc;
   const priceEl = document.getElementById('info-price');
   priceEl.textContent = priceDisplay;
   priceEl.className = 'info-panel-price' + (sold ? ' sold' : '');
   document.getElementById('info-sold').style.display = sold ? 'inline-block' : 'none';
-  
+
   const btn = document.getElementById('info-btn');
   if (sold) {
     btn.style.display = 'none';
@@ -796,7 +814,7 @@ function openInfoPanel(index) {
     btn.textContent = 'Noch verfügbar?';
     btn.href = `https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?`;
   }
-  
+
   requestAnimationFrame(() => {
     document.getElementById('info-backdrop').classList.add('open');
     panel.classList.add('open');
@@ -808,7 +826,7 @@ function openInfoPanel(index) {
 function closeInfoPanel() {
   const panel = document.getElementById('info-panel');
   panel.style.transition = 'transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)';
-  panel.style.transform = ''; 
+  panel.style.transform = '';
   panel.classList.remove('open');
   document.getElementById('info-backdrop').classList.remove('open');
   document.getElementById('main-wrapper').classList.remove('content-pushed');
@@ -844,18 +862,24 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     document.getElementById('lb-counter').textContent = '';
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
-  }, 250); 
+  }, 250);
 };
 
+/* =============================================
+   SWIPE-TO-CLOSE — prüft inner.scrollTop
+   damit natives Scrollen im Panel nicht stört
+   ============================================= */
 (function() {
   const panel = document.getElementById('info-panel');
+  const inner = document.getElementById('info-panel-inner');
   let startY = 0, currentY = 0, isDragging = false;
 
   panel.addEventListener('touchstart', e => {
-    if (panel.scrollTop > 0) return;
+    // Nur schließen wenn der innere Scroll-Container ganz oben ist
+    if (inner && inner.scrollTop > 5) return;
     startY = e.touches[0].clientY;
     isDragging = true;
-    panel.style.transition = 'none'; 
+    panel.style.transition = 'none';
   }, { passive: true });
 
   panel.addEventListener('touchmove', e => {
@@ -867,13 +891,13 @@ document.getElementById('info-img-wrap').onclick = function(e) {
       panel.style.transform = `translateY(${diffY}px)`;
       const progress = Math.min(diffY / (window.innerHeight * 0.4), 1);
       document.getElementById('info-backdrop').style.opacity = 1 - (progress * 0.5);
-      
-      if(window.innerWidth <= 1024) {
-          const wrapper = document.getElementById('main-wrapper');
-          const scale = 0.93 + (progress * 0.07); 
-          wrapper.style.transform = `scale(${scale}) translateY(${1 - progress}vh)`;
-          wrapper.style.borderRadius = `${24 - (progress * 24)}px`;
-          wrapper.style.filter = `brightness(${0.4 + (progress * 0.6)}) grayscale(${20 - (progress * 20)}%)`;
+
+      if (window.innerWidth <= 1024) {
+        const wrapper = document.getElementById('main-wrapper');
+        const scale = 0.93 + (progress * 0.07);
+        wrapper.style.transform = `scale(${scale}) translateY(${1 - progress}vh)`;
+        wrapper.style.borderRadius = `${24 - (progress * 24)}px`;
+        wrapper.style.filter = `brightness(${0.4 + (progress * 0.6)}) grayscale(${20 - (progress * 20)}%)`;
       }
     } else {
       panel.style.transform = `translateY(${diffY * 0.1}px)`;
@@ -884,21 +908,21 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     if (!isDragging) return;
     isDragging = false;
     panel.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)';
-    
+
     document.getElementById('info-backdrop').style.opacity = '';
     const wrapper = document.getElementById('main-wrapper');
     wrapper.style.transform = '';
     wrapper.style.borderRadius = '';
     wrapper.style.filter = '';
-    
+
     const diffY = currentY - startY;
-    const velocity = diffY / 250; 
-    
+    const velocity = diffY / 250;
+
     if (diffY > 100 || velocity > 0.5) {
       closeInfoPanel();
     } else {
       panel.style.transform = 'translateY(0)';
-      setTimeout(() => { if(panel.classList.contains('open')) panel.style.transform = ''; }, 500);
+      setTimeout(() => { if (panel.classList.contains('open')) panel.style.transform = ''; }, 500);
     }
   }, { passive: true });
 })();
@@ -912,12 +936,8 @@ document.getElementById('artist-img').onclick = function() {
 };
 document.getElementById('artist-lb-bg').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
 document.getElementById('artist-lb-close').onclick = () => { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; };
-
 document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
-  if (e.target === this) {
-    document.getElementById('artist-lightbox').classList.remove('open'); 
-    document.body.style.overflow = '';
-  }
+  if (e.target === this) { document.getElementById('artist-lightbox').classList.remove('open'); document.body.style.overflow = ''; }
 };
 
 (function(){
@@ -926,22 +946,22 @@ document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
   const navBar = document.getElementById('main-nav');
   if (!burger||!drawer) return;
 
-  function openNav() { 
-    burger.classList.add('open'); 
-    drawer.classList.add('open'); 
+  function openNav() {
+    burger.classList.add('open');
+    drawer.classList.add('open');
     navBar.classList.add('nav-open');
-    document.body.style.overflow='hidden'; 
-    document.getElementById('main-wrapper').classList.add('content-pushed'); 
+    document.body.style.overflow='hidden';
+    document.getElementById('main-wrapper').classList.add('content-pushed');
   }
-  function closeNav() { 
-    burger.classList.remove('open'); 
+  function closeNav() {
+    burger.classList.remove('open');
     drawer.classList.remove('open');
     navBar.classList.remove('nav-open');
-    document.body.style.overflow=''; 
-    document.getElementById('main-wrapper').classList.remove('content-pushed'); 
+    document.body.style.overflow='';
+    document.getElementById('main-wrapper').classList.remove('content-pushed');
   }
   burger.addEventListener('click', () => drawer.classList.contains('open') ? closeNav() : openNav());
-  
+
   document.querySelectorAll('.drawer-link').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -950,7 +970,7 @@ document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
       setTimeout(() => {
         window.location.href = targetId;
         history.pushState('', document.title, window.location.pathname + window.location.search);
-      }, 350); 
+      }, 350);
     });
   });
 })();
@@ -973,18 +993,18 @@ document.addEventListener('keydown', function(e) {
   const lbContent = lightbox.querySelector('.lb-content');
   const lbBg = document.getElementById('lb-bg');
   if (!lbContent || !lbBg) return;
-  
+
   lightbox.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
   let startX = 0, startY = 0, currentX = 0, currentY = 0, isDragging = false;
   let startTime = 0;
 
-  lbContent.addEventListener('touchstart', e => { 
-    startX = e.changedTouches[0].clientX; 
-    startY = e.changedTouches[0].clientY; 
+  lbContent.addEventListener('touchstart', e => {
+    startX = e.changedTouches[0].clientX;
+    startY = e.changedTouches[0].clientY;
     isDragging = true;
     startTime = Date.now();
-    lbContent.style.transition = 'none'; 
+    lbContent.style.transition = 'none';
     lbBg.style.transition = 'none';
   }, { passive: true });
 
@@ -992,11 +1012,8 @@ document.addEventListener('keydown', function(e) {
     if (!isDragging) return;
     currentX = e.changedTouches[0].clientX - startX;
     currentY = e.changedTouches[0].clientY - startY;
-    
     const resistanceY = currentY > 0 ? currentY * 0.9 : currentY * 0.4;
-    
     lbContent.style.transform = `translate3d(${currentX}px, ${resistanceY}px, 0) scale(${1 - Math.abs(resistanceY)*0.0003})`;
-    
     const fadeProgress = Math.max(0, 1 - Math.abs(currentY) / (window.innerHeight * 0.7));
     lbBg.style.opacity = fadeProgress;
   }, { passive: true });
@@ -1004,7 +1021,6 @@ document.addEventListener('keydown', function(e) {
   lbContent.addEventListener('touchend', e => {
     if (!isDragging) return;
     isDragging = false;
-    
     const timeElapsed = Date.now() - startTime;
     const velocityX = Math.abs(currentX) / timeElapsed;
     const velocityY = Math.abs(currentY) / timeElapsed;
@@ -1025,12 +1041,10 @@ document.addEventListener('keydown', function(e) {
         const direction = currentX < 0 ? -window.innerWidth : window.innerWidth;
         lbContent.style.transform = `translate3d(${direction}px, 0, 0) scale(0.95)`;
         lbContent.style.opacity = '0';
-        
         setTimeout(() => {
           openLightboxAtIndex(next);
           lbContent.style.transition = 'none';
           lbContent.style.transform = `translate3d(${-direction}px, 0, 0) scale(0.95)`;
-          
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               lbContent.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s';
