@@ -656,7 +656,7 @@ function renderGallery(data) {
     card.className = 'pcard' + (sold ? ' sold' : '');
     const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
     // Button Text geändert zu "Noch verfügbar?"
-    const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Noch verfügbar?</a>` : '';
+    const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?">Noch verfügbar?</a>` : '';
     card.innerHTML = `
       <div class="p-wrapper">
         <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
@@ -794,7 +794,7 @@ function openInfoPanel(index) {
   } else {
     btn.style.display = 'block';
     btn.textContent = 'Noch verfügbar?';
-    btn.href = `mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%20ist%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C%20noch%20verf%C3%BCgbar%3F`;
+    btn.href = `https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?`;
   }
   
   requestAnimationFrame(() => {
