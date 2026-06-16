@@ -1,3 +1,5 @@
+--- START OF FILE Paste June 17, 2026 - 12:39AM ---
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -510,7 +512,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     <div class="info-panel-desc" id="info-desc"></div>
     <div class="info-panel-price" id="info-price"></div>
     <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
-    <a class="info-panel-btn" id="info-btn" href="#">Details anfragen</a>
+    <a class="info-panel-btn" id="info-btn" href="#">Noch verfügbar?</a>
     <button class="info-panel-share" id="info-share-btn" onclick="shareInfoPanel()">↑ &nbsp; Teilen</button>
   </div>
 </div>
@@ -654,7 +656,8 @@ function renderGallery(data) {
     const card = document.createElement('div');
     card.className = 'pcard' + (sold ? ' sold' : '');
     const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
-    const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Details anfragen</a>` : '';
+    // Button Text geändert zu "Noch verfügbar?"
+    const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen">Noch verfügbar?</a>` : '';
     card.innerHTML = `
       <div class="p-wrapper">
         <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
@@ -785,11 +788,14 @@ function openInfoPanel(index) {
   priceEl.textContent = priceDisplay;
   priceEl.className = 'info-panel-price' + (sold ? ' sold' : '');
   document.getElementById('info-sold').style.display = sold ? 'inline-block' : 'none';
-const btn = document.getElementById('info-btn');
-  if (sold) btn.style.display = 'none'; else {
+  
+  const btn = document.getElementById('info-btn');
+  if (sold) {
+    btn.style.display = 'none';
+  } else {
     btn.style.display = 'block';
-    btn.textContent = 'Details anfragen'; // Sorgt dafür, dass hier nicht wieder "Anfragen" steht
-    btn.href = `mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen`;
+    btn.textContent = 'Noch verfügbar?';
+    btn.href = `mailto:moritz.geberth@gmail.com?subject=Anfrage%3A%20${encodeURIComponent(title)}&body=Hallo%20Moritz%2C%20ist%20das%20Werk%20%E2%80%9E${encodeURIComponent(title)}%E2%80%9C%20noch%20verf%C3%BCgbar%3F`;
   }
   
   requestAnimationFrame(() => {
