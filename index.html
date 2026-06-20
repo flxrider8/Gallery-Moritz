@@ -820,9 +820,8 @@ function updateWorksStat() {
   const el = document.getElementById('works-stat');
   if (!el || allPaintingsData.length === 0) return;
   el.dataset.target = allPaintingsData.length;
-  // Trigger counter if already visible
-  const rect = el.getBoundingClientRect();
-  if (rect.top < window.innerHeight) animateCounter(el);
+  el.textContent = '0';
+  statsObserver.observe(el);
 }
 
 const searchInput = document.getElementById('gallery-search');
