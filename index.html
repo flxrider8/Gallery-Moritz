@@ -4,15 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- ==========================================
-     START: LUXURY OPEN GRAPH & META TAGS
-     ========================================== -->
 <title>Moritz Gallery | Fine Art & Atelier Wien</title>
 <meta name="description" content="Exklusive, zeitlose Kunstwerke in Öl und Acryl von Moritz Geberth. Entdecken Sie eine kuratierte Fine Art Kollektion für moderne Ästhetik.">
 <meta name="author" content="Moritz Geberth">
 <meta name="theme-color" content="#070706">
 
-<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://moritzgallery.at/">
 <meta property="og:title" content="Moritz Gallery | Fine Art & Atelier Wien">
@@ -23,20 +19,15 @@
 <meta property="og:site_name" content="Moritz Gallery">
 <meta property="og:locale" content="de_AT">
 
-<!-- Twitter / Discord / Snapchat / Telegram -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://moritzgallery.at/">
 <meta name="twitter:title" content="Moritz Gallery | Fine Art & Atelier Wien">
 <meta name="twitter:description" content="Exklusive, zeitlose Kunstwerke in Öl und Acryl von Moritz Geberth. Entdecken Sie eine kuratierte Fine Art Kollektion für moderne Ästhetik.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/flxrider8/Gallery-Moritz/main/portfolio/artist.jpg">
 
-<!-- Apple / iOS Spezifisch -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Moritz Art">
-<!-- ==========================================
-     ENDE: LUXURY OPEN GRAPH & META TAGS
-     ========================================== -->
 
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
@@ -56,7 +47,6 @@
 html { scroll-behavior: smooth; scroll-padding-top: 130px; background: #000; }
 body { background: #000; color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; overflow-x: hidden; cursor: default; }
 
-/* MAIN CONTENT WRAPPER FÜR DEN 3D IOS EFFEKT */
 #main-wrapper {
   background: var(--black);
   min-height: 100vh;
@@ -77,17 +67,14 @@ body { background: #000; color: var(--text); font-family: 'Cormorant Garamond', 
 }
 @media(min-width:1025px) { .content-pushed { transform: none; border-radius: 0; filter: none; pointer-events: all; } }
 
-/* NAV */
 nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:1.6rem 4rem; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom,rgba(7,7,6,0.9) 0%,transparent 100%); transition:background 0.4s; }
 nav.scrolled { background:rgba(7,7,6,0.97); border-bottom:1px solid var(--border); }
 nav.nav-open { background: transparent !important; border-bottom: none !important; }
-
 .nav-logo { font-family:'Cinzel',serif; font-size:1.05rem; letter-spacing:0.35em; color:var(--gold); cursor:pointer; user-select:none; }
 .nav-links { display:flex; gap:2.5rem; list-style:none; }
 .nav-links a { font-size:0.68rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.3s; }
 .nav-links a:hover { color:var(--gold); }
 
-/* HERO */
 .hero { height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position:relative; overflow:hidden; }
 .hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 55% at 50% 40%,rgba(139,105,20,0.14),transparent 70%),radial-gradient(ellipse 50% 40% at 15% 75%,rgba(100,70,10,0.08),transparent 60%),var(--black); z-index: 1; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:20vh; background:linear-gradient(to top, var(--black) 0%, transparent 100%); pointer-events:none; z-index: 5; }
@@ -114,7 +101,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .scroll-drop { width: 3px; height: 18px; background: linear-gradient(to bottom, var(--gold-l), var(--gold), var(--gold-d)); position: absolute; left: -1px; top: -18px; border-radius: 3px; box-shadow: 0 0 8px rgba(200, 169, 81, 0.6); animation: liquidDrop 2.5s cubic-bezier(0.7, 0, 0.3, 1) infinite; }
 @keyframes liquidDrop { 0% { top: -18px; transform: scaleY(0.5); opacity: 0; } 20% { opacity: 1; transform: scaleY(1.2); } 80% { top: 100%; transform: scaleY(1); opacity: 0.5; } 100% { top: 100%; opacity: 0; } }
 
-/* HEADER & SEARCH */
 .sec-head { text-align:center; padding:7rem 2rem 3rem; position: relative; z-index: 10; }
 .sec-eye { font-size:0.62rem; letter-spacing:0.55em; text-transform:uppercase; color:var(--gold); margin-bottom:0.9rem; }
 .sec-title { font-size:clamp(2.5rem,5vw,4.2rem); font-weight:300; font-style:italic; color:var(--text); }
@@ -131,23 +117,18 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .search-clear.visible { opacity: 1; pointer-events: all; }
 .search-clear:hover { color: var(--gold); }
 
-/* PULSING TAP HINT */
 .tap-hint { text-align:center; font-size:0.55rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin: 0 auto 2.5rem; display: block; opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards, pulseGlow 2.5s infinite alternate; }
 @keyframes pulseGlow { 0% { opacity: 0.4; filter: drop-shadow(0 0 2px rgba(200,169,81,0)); } 100% { opacity: 0.9; filter: drop-shadow(0 0 8px rgba(200,169,81,0.5)); } }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 @media(min-width:1025px){ .tap-hint { display:none; } }
 
-/* GALLERY */
 .gallery-wrap { padding:0 4rem 9rem; max-width:1700px; margin:0 auto; }
 .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:5rem 4rem; }
 
-/* PAINTING CARD */
 .pcard { position:relative; opacity:0; transform:translateY(60px) scale(0.95); transition:opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .pcard.visible { opacity:1; transform:translateY(0) scale(1); }
 .p-wrapper { position:relative; display:block; cursor:pointer; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
-@media (hover: none) {
-  .p-wrapper:active { transform: scale(0.96); transition: transform 0.15s cubic-bezier(0.32, 0.72, 0, 1); }
-}
+@media (hover: none) { .p-wrapper:active { transform: scale(0.96); transition: transform 0.15s cubic-bezier(0.32, 0.72, 0, 1); } }
 .p-img-box { position:relative; overflow:hidden; aspect-ratio:4/3; border-radius: 4px; }
 .p-img-box img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.2s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.5s; opacity:0; }
 .p-img-box img.loaded { opacity:1; }
@@ -167,23 +148,106 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .p-inquire:hover { border-color:var(--gold); background:rgba(200,169,81,0.07); transform: translateY(-2px); }
 .pcard.sold .p-inquire { display:none; }
 
+/* Conversion Nudge unter Karten-Button */
+.p-inquire-nudge {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-top: 0.45rem;
+  opacity: 0.65;
+  font-style: italic;
+}
+.pcard.sold .p-inquire-nudge { display: none; }
+
 .p-info { padding:1.4rem 0.3rem 0; }
-.p-meta { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.45rem; }
+.p-meta { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.45rem; gap: 1rem; }
 .p-title { font-size:1.3rem; font-weight:400; font-style:italic; color:var(--text); letter-spacing:0.02em; }
 .p-desc { font-size:0.92rem; font-weight:300; color:var(--muted); line-height:1.75; letter-spacing:0.02em; }
-.p-price { font-size:0.9rem; font-weight:300; color:var(--gold-l); letter-spacing:0.06em; font-family:'Cormorant Garamond',serif; white-space:nowrap; }
-.pcard.sold .p-price { color:var(--muted); text-decoration:line-through; opacity:0.6; }
 
-/* ARTIST PAGE & CONTACT */
+/* Preis — prominenter */
+.p-price {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  font-family: 'Cinzel', serif;
+  white-space: nowrap;
+  background: rgba(200,169,81,0.07);
+  border: 1px solid rgba(200,169,81,0.2);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  flex-shrink: 0;
+}
+.pcard.sold .p-price { color:var(--muted); text-decoration:line-through; opacity:0.6; background: none; border-color: transparent; }
+
+/* ==========================================
+   ARTIST / ABOUT SECTION
+   ========================================== */
 .artist-sec { padding:5rem 2rem 7rem; max-width:1100px; margin:0 auto; }
 .artist-inner { display:flex; gap:5rem; align-items:flex-start; margin-top:1rem; }
 .artist-portrait-col { flex-shrink:0; }
-.artist-portrait-frame { width:320px; height:400px; border:1px solid var(--border); box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--border),0 35px 80px rgba(0,0,0,0.8); overflow:hidden; position:relative; border-radius: 4px; }
+.artist-portrait-frame {
+  width:320px; height:400px;
+  border:1px solid var(--border);
+  box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--border),0 35px 80px rgba(0,0,0,0.8);
+  overflow:hidden;
+  position:relative;
+  border-radius: 4px;
+}
+.artist-portrait-frame img {
+  transition: transform 0.1s linear;
+  will-change: transform;
+  transform: scale(1.1) translateY(0px);
+}
 .artist-portrait-placeholder { width:100%; height:100%; background:var(--surface2); display:flex; align-items:center; justify-content:center; }
 .artist-portrait-placeholder svg { width:80px; height:80px; opacity:0.4; color:var(--gold); }
-.artist-text-col { flex:1; }
-.about-text { font-size:1.05rem; font-weight:300; color:var(--muted); line-height:2.1; letter-spacing:0.03em; }
 
+.artist-text-col { flex:1; }
+
+/* Pull-Quote */
+.artist-pull-quote {
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gold-l);
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.8rem;
+  padding-left: 1.4rem;
+  border-left: 2px solid var(--gold-d);
+  opacity: 0.92;
+}
+
+.about-text-body { font-size:1.05rem; font-weight:300; color:var(--muted); line-height:2.1; letter-spacing:0.03em; }
+
+/* Stats Row */
+.artist-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.stat-item { display: flex; flex-direction: column; gap: 0.35rem; }
+.stat-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+.stat-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ==========================================
+   CONTACT & FOOTER
+   ========================================== */
 .contact-sec { padding:8rem 2rem 10rem; max-width:900px; margin:4rem auto 0; text-align:center; border-top:1px solid rgba(200,169,81,0.15); }
 .contact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2.5rem 3rem; margin-top:2rem; max-width:900px; margin-left:auto; margin-right:auto; }
 .contact-item { display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.7rem; transition: transform 0.3s; }
@@ -193,25 +257,22 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .contact-icon svg { width:20px; height:20px; }
 .contact-label { font-size:0.6rem; letter-spacing:0.45em; text-transform:uppercase; color:var(--muted); }
 .contact-value { font-size:0.95rem; color:var(--text); text-decoration:none; letter-spacing:0.04em; transition:color 0.3s; font-style:italic; }
-
 .main-footer { border-top:1px solid var(--border); padding:3.5rem 4rem; display:flex; justify-content:space-between; align-items:center; }
 .foot-logo { font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.35em; color:var(--gold); }
 .foot-text { font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); }
 
-/* =============================================
+/* ==========================================
    INFO PANEL — 85svh, scrollbar, iOS-safe
-   ============================================= */
+   ========================================== */
 .info-panel {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 800;
-  /* Fallback für ältere Browser */
   height: 85vh;
-  /* svh = "small viewport height" → ignoriert iOS Safari Toolbar → kein Flickering */
   height: 85svh;
-  overflow: hidden; /* Panel selbst scrollt NICHT – nur inner */
+  overflow: hidden;
   background: rgba(20, 19, 16, 0.85);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
@@ -222,20 +283,18 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 }
 .info-panel.open { transform: translateY(0); }
 
-/* Innerer Scroll-Container */
 .info-panel-inner {
-  height: calc(100% - 27px); /* 27px = Handle-Bereich */
+  height: calc(100% - 27px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain; /* verhindert, dass iOS die Seite dahinter scrollt */
-  /* Safe-Area für iPhone Home-Indicator */
+  overscroll-behavior-y: contain;
   padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 .info-panel-backdrop { position:fixed; top:-50vh; bottom:-50vh; left:-50vw; right:-50vw; z-index:799; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:opacity 0.5s ease; }
 .info-panel-backdrop.open { opacity:1; pointer-events:all; }
-
 .info-panel-handle { width:44px; height:5px; background:rgba(200,169,81,0.3); border-radius:3px; margin:1rem auto; flex-shrink: 0; }
+
 .info-panel-img-wrap { width: calc(100% - 2rem); margin: 0 auto; aspect-ratio:4/3; overflow:hidden; position:relative; cursor:pointer; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
 .info-panel-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; border:4px solid var(--gold); border-radius: 12px; box-sizing:border-box; }
 .info-panel-x { position:absolute; top:0.8rem; right:0.8rem; z-index:10; width:36px; height:36px; background:rgba(7,7,6,0.6); border:none; color:var(--text); font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius: 50%; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition: transform 0.2s; }
@@ -251,16 +310,64 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .info-panel.open .info-panel-divider { opacity:0.6; width:70px; }
 .info-panel-desc { font-size:0.95rem; color:var(--muted); letter-spacing:0.03em; line-height:1.8; margin-bottom:0.5rem; opacity:0; transform:translateY(15px); transition:opacity 0.4s 0.38s, transform 0.4s 0.38s; }
 .info-panel.open .info-panel-desc { opacity:1; transform:translateY(0); }
-.info-panel-price { font-size:1.8rem; font-weight:300; color:var(--gold-l); letter-spacing:0.05em; font-family:'Cormorant Garamond',serif; margin-bottom:2rem; opacity:0; transform:translateY(15px); transition:opacity 0.4s 0.44s, transform 0.4s 0.44s; }
-.info-panel.open .info-panel-price { opacity:1; transform:translateY(0); }
-.info-panel-price.sold { color:var(--muted); text-decoration:line-through; opacity:0.5 !important; }
 
-.info-panel-btn { display:block; width:100%; padding:1.2rem; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--black); background:linear-gradient(135deg, var(--gold-l), var(--gold-d)); border:none; border-radius: 12px; text-decoration:none; text-align:center; cursor:pointer; opacity:0; transform:translateY(15px); transition:opacity 0.4s 0.5s, transform 0.4s 0.5s, filter 0.3s; box-shadow: 0 10px 20px rgba(200,169,81,0.2); }
+/* Preis im Panel — groß & prominent */
+.info-panel-price {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  font-family: 'Cinzel', serif;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.4s 0.44s, transform 0.4s 0.44s;
+}
+.info-panel.open .info-panel-price { opacity:1; transform:translateY(0); }
+.info-panel-price.sold { color:var(--muted); text-decoration:line-through; opacity:0.5 !important; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; }
+
+/* Einzelstück Badge im Panel */
+.info-panel-unique {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-d);
+  border: 1px solid rgba(200,169,81,0.2);
+  border-radius: 20px;
+  padding: 0.3rem 0.8rem;
+  margin-bottom: 1.8rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s 0.48s, transform 0.4s 0.48s;
+}
+.info-panel.open .info-panel-unique { opacity: 1; transform: translateY(0); }
+.info-panel-unique::before { content: '◆'; font-size: 0.4rem; }
+.info-panel-price.sold + .info-panel-unique { display: none; }
+
+.info-panel-btn { display:block; width:100%; padding:1.2rem; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--black); background:linear-gradient(135deg, var(--gold-l), var(--gold-d)); border:none; border-radius: 12px; text-decoration:none; text-align:center; cursor:pointer; opacity:0; transform:translateY(15px); transition:opacity 0.4s 0.52s, transform 0.4s 0.52s, filter 0.3s; box-shadow: 0 10px 20px rgba(200,169,81,0.2); }
 .info-panel.open .info-panel-btn { opacity:1; transform:translateY(0); }
 @media (hover: none) { .info-panel-btn:active { transform: scale(0.96) !important; transition: transform 0.1s !important; } }
 @media (hover: hover) { .info-panel-btn:hover { filter: brightness(1.2); transform: translateY(-2px); } }
 
-.info-panel-share { display: block; width: 100%; padding: 1.1rem; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,81,0.05); border: 1px solid rgba(200,169,81,0.3); border-radius: 12px; text-align: center; cursor: pointer; margin-top: 1rem; opacity: 0; transform: translateY(15px); transition: opacity 0.4s 0.54s, transform 0.4s 0.54s, background 0.3s; }
+/* Conversion Nudge im Panel */
+.info-panel-nudge {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.65rem;
+  font-style: italic;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s 0.58s, transform 0.4s 0.58s;
+}
+.info-panel.open .info-panel-nudge { opacity: 0.65; transform: translateY(0); }
+
+.info-panel-share { display: block; width: 100%; padding: 1.1rem; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,81,0.05); border: 1px solid rgba(200,169,81,0.3); border-radius: 12px; text-align: center; cursor: pointer; margin-top: 1rem; opacity: 0; transform: translateY(15px); transition: opacity 0.4s 0.62s, transform 0.4s 0.62s, background 0.3s; }
 .info-panel.open .info-panel-share { opacity: 1; transform: translateY(0); }
 @media (hover: none) { .info-panel-share:active { transform: scale(0.96) !important; background: rgba(200,169,81,0.15); transition: transform 0.1s, background 0.1s; } }
 
@@ -283,26 +390,22 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .lb-prev { left: 2.5rem; }
 .lb-next { right: 2.5rem; }
 
-/* --- MOBILE LAYOUT UPDATES --- */
+/* MOBILE */
 @media(max-width:768px) {
   .gallery-grid { gap:3.5rem !important; grid-template-columns: 1fr; }
   .p-img-box { border-width:8px !important; border-radius: 2px; }
   .p-title { font-size:1.2rem !important; }
   .lb-arrow { display:none; }
-
   nav { padding:1.2rem 1.5rem; padding-top:calc(env(safe-area-inset-top,0px) + 1.2rem); background:#070706; border-bottom:none; }
   nav.scrolled { padding:0.9rem 1.5rem; padding-top:calc(env(safe-area-inset-top,0px) + 0.9rem); background:#070706; border-bottom:1px solid var(--border); }
   nav.nav-open { background: transparent !important; border-bottom: none !important; }
-
   .nav-links { display:none; }
   .nav-hamburger { display:flex !important; }
-
   .hero-title { font-size:clamp(3.5rem, 16vw, 6rem); line-height: 1; }
   .title-break { display: block; margin-top: -0.1em; margin-left: 0 !important; }
   .hero-eyebrow { font-size:0.5rem; gap: 0.8rem; margin-bottom: 2rem; }
   .hero-eyebrow::before, .hero-eyebrow::after { width: 25px; }
   .hero-subtitle { font-size:0.6rem; letter-spacing:0.3em; width: 85%; }
-
   .gallery-wrap { padding:0 1.2rem 5rem; }
   .sec-head { padding:6rem 1.5rem 2.5rem; }
   .p-info { padding:1.2rem 0.2rem 0; }
@@ -310,10 +413,12 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   .artist-inner { flex-direction:column; gap:2rem; align-items:center; }
   .artist-portrait-frame { width:240px; height:300px; }
   .artist-text-col { text-align:center; }
+  .artist-pull-quote { text-align: left; }
+  .artist-stats { justify-content: center; gap: 1.8rem; }
+  .stat-number { font-size: 1.8rem; }
   .contact-sec { padding:4rem 1.5rem 6rem; }
   .contact-grid { grid-template-columns:1fr 1fr; gap:2.5rem 1.2rem; }
   .main-footer { flex-direction:column; gap:1rem; text-align:center; padding:2.5rem 1.5rem; }
-
   .lb-content img { max-width:95vw; max-height:75vh; }
   .lb-close { top:1rem; right:1rem; width: 40px; height: 40px; background: rgba(20,19,16,0.75); }
   .lb-info-bar { bottom: 1.5rem; }
@@ -328,48 +433,33 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   .info-panel-title { font-size:2.8rem; grid-column:1/-1; }
   .info-panel-divider { grid-column:1/-1; }
   .info-panel-desc { grid-column:1; font-size: 1.05rem; }
-  .info-panel-price { font-size:2.2rem; grid-column:2; text-align:right; }
+  .info-panel-price { font-size:2.8rem; grid-column:2; text-align:right; }
+  .info-panel-unique { grid-column:2; justify-content: flex-end; }
   .info-panel-sold-note { grid-column:1/-1; }
   .info-panel-btn { grid-column:1; margin-top:0; padding: 1.4rem; }
+  .info-panel-nudge { grid-column:1; text-align: left; }
   .info-panel-share { grid-column:2; margin-top:0; padding: 1.4rem; }
-  .info-panel-close-row { grid-column:1/-1; font-size: 0.65rem; margin-top: 2rem; }
 }
 @media(min-width:1025px) { .info-panel { display:none; } .info-panel-backdrop { display:none; } }
 
-/* --- HAMBURGER --- */
 .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; z-index:300; min-width:44px; min-height:44px; justify-content:center; align-items:center; padding:10px; }
 .nav-hamburger span { display:block; width:24px; height:1.5px; background:var(--gold); transition:all 0.35s ease; }
 .nav-hamburger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
 .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
 
-/* --- FULLSCREEN BURGER MENU --- */
-.nav-drawer {
-  position:fixed; inset:0; width:100%; height:100vh;
-  background:rgba(10,9,7,0.85); backdrop-filter:blur(25px) saturate(180%); -webkit-backdrop-filter:blur(25px) saturate(180%);
-  z-index:150;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
-  opacity:0; pointer-events:none;
-  transform:scale(1.05);
-  transition:opacity 0.5s ease, transform 0.5s ease;
-}
+.nav-drawer { position:fixed; inset:0; width:100%; height:100vh; background:rgba(10,9,7,0.85); backdrop-filter:blur(25px) saturate(180%); -webkit-backdrop-filter:blur(25px) saturate(180%); z-index:150; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.5rem; opacity:0; pointer-events:none; transform:scale(1.05); transition:opacity 0.5s ease, transform 0.5s ease; }
 .nav-drawer.open { opacity:1; pointer-events:all; transform:scale(1); }
-.drawer-link {
-  font-family:'Cinzel',serif; font-size:2.2rem; letter-spacing:0.15em; color:var(--text); text-decoration:none; text-transform:uppercase;
-  opacity:0; transform:translateY(20px);
-  transition:transform 0.4s ease, opacity 0.4s ease, color 0.3s;
-}
+.drawer-link { font-family:'Cinzel',serif; font-size:2.2rem; letter-spacing:0.15em; color:var(--text); text-decoration:none; text-transform:uppercase; opacity:0; transform:translateY(20px); transition:transform 0.4s ease, opacity 0.4s ease, color 0.3s; }
 .nav-drawer.open .drawer-link:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.15s; }
 .nav-drawer.open .drawer-link:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.25s; }
 .drawer-link:active { color:var(--gold); transform:scale(0.95); transition:0.1s; }
 
-/* LADE SPINNER */
 .gallery-loader { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:4rem 0; }
 .spinner { width:40px; height:40px; border:3px solid rgba(200,169,81,0.1); border-top:3px solid var(--gold); border-radius:50%; animation:spin 1s linear infinite; }
 @keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 .loader-text { font-size:0.9rem; letter-spacing:0.2em; color:var(--muted); font-style:italic; }
 
-/* NACH OBEN BUTTON */
 .scroll-top-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 150; width: 44px; height: 44px; background: rgba(20,19,16,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(200,169,81,0.4); color: var(--gold); display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1); font-size: 1.1rem; }
 .scroll-top-btn.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
 .scroll-top-btn:not(.visible) { transform: translateY(20px); }
@@ -421,7 +511,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     <div class="sec-eye">Kollektion</div>
     <h2 class="sec-title">Ausgewählte Werke</h2>
     <div class="sec-line"></div>
-
     <form class="search-wrapper" id="search-form" action="javascript:void(0);">
       <div class="search-container">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -429,7 +518,6 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
         <button type="button" class="search-clear" id="search-clear" aria-label="Suche löschen">✕</button>
       </div>
     </form>
-
     <div id="gallery-count" style="font-size:0.62rem;letter-spacing:0.4em;color:var(--muted);text-transform:uppercase;font-family:'Cinzel',serif;opacity:0;transition:opacity 0.4s;margin-top:0.5rem;"></div>
   </section>
 
@@ -458,9 +546,26 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
         </div>
       </div>
       <div class="artist-text-col">
-        <div class="about-text">
+        <p class="artist-pull-quote">
+          „Jedes Werk ist ein Einzelstück — einmal verkauft, für immer vergeben."
+        </p>
+        <div class="about-text-body">
           Mein Name ist Moritz Geberth. Seit ich denken kann, ist Kunst meine Sprache – doch erst vor einem halben Jahr habe ich begonnen, diese Sprache radikal und kompromisslos auf die Leinwand zu bringen.<br><br>
-          Mit 17 Jahren stehe ich am Anfang einer Reise, die für mich weit über Farbe und Form hinausgeht. Ich übersetze meine Gedanken in Texturen aus Öl und Acryl, um Emotionen festzuhalten, bevor sie verblassen. Ein Werk von mir zu erwerben, bedeutet für Sie mehr als nur den Kauf eines Bildes: Es ist das Investment in einen Künstler an seinem Startpunkt. Ich möchte nicht nur Räume füllen, sondern den Betrachter daran erinnern, dass die größte Kraft in der eigenen Kreation liegt. Begleiten Sie mich bei dieser Entwicklung – jetzt, wo die Reise beginnt.
+          Mit 17 Jahren stehe ich am Anfang einer Reise, die für mich weit über Farbe und Form hinausgeht. Ich übersetze meine Gedanken in Texturen aus Öl und Acryl, um Emotionen festzuhalten, bevor sie verblassen. Ein Werk von mir zu erwerben bedeutet mehr als den Kauf eines Bildes — es ist das Investment in einen Künstler an seinem Startpunkt.
+        </div>
+        <div class="artist-stats">
+          <div class="stat-item">
+            <span class="stat-number" data-target="17">0</span>
+            <span class="stat-label">Jahre alt</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="6">0</span>
+            <span class="stat-label">Monate aktiv</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="works-stat">—</span>
+            <span class="stat-label">Originale</span>
+          </div>
         </div>
       </div>
     </div>
@@ -504,13 +609,11 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
     </div>
     <a href="#" onclick="document.getElementById('impressum-modal').style.display='flex';return false;" style="font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);text-decoration:none;text-transform:uppercase;font-family:'Cinzel',serif;">Impressum</a>
   </footer>
-</div> <!-- END MAIN WRAPPER -->
+</div>
 
 <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Nach oben">↑</button>
 
 <div class="info-panel-backdrop" id="info-backdrop"></div>
-
-<!-- INFO PANEL — Handle außen, alles andere im scrollbaren Inner-Div -->
 <div class="info-panel" id="info-panel">
   <div class="info-panel-handle"></div>
   <div class="info-panel-inner" id="info-panel-inner">
@@ -527,8 +630,10 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
       <div class="info-panel-divider"></div>
       <div class="info-panel-desc" id="info-desc"></div>
       <div class="info-panel-price" id="info-price"></div>
+      <div class="info-panel-unique" id="info-unique">Einzelstück · Nur ein Original</div>
       <div class="info-panel-sold-note" id="info-sold" style="display:none">— Dieses Werk wurde verkauft —</div>
       <a class="info-panel-btn" id="info-btn" href="#">Noch verfügbar?</a>
+      <div class="info-panel-nudge" id="info-nudge">Moritz antwortet meist innerhalb eines Tages</div>
       <button class="info-panel-share" id="info-share-btn" onclick="shareInfoPanel()">↑ &nbsp; Teilen</button>
     </div>
   </div>
@@ -579,7 +684,6 @@ const ImgPress = {
   MAX_W: 1400, MAX_H: 1050, QUALITY: 0.82,
   GRID_MAX_W: 800, GRID_MAX_H: 600, GRID_QUALITY: 0.75,
   _cache: new Map(),
-
   _compress(url, maxW, maxH, quality) {
     const cacheKey = url + '@' + maxW;
     if (this._cache.has(cacheKey)) return Promise.resolve(this._cache.get(cacheKey));
@@ -607,10 +711,7 @@ const ImgPress = {
   compress(url) { return this._compress(url, this.MAX_W, this.MAX_H, this.QUALITY); },
   compressGrid(url) { return this._compress(url, this.GRID_MAX_W, this.GRID_MAX_H, this.GRID_QUALITY); },
   applyTo(imgEl, url) { this.compress(url).then(c => { if (imgEl.src !== c) imgEl.src = c; }); },
-  applyGridTo(imgEl, url) {
-    imgEl.dataset.src = url;
-    imgGridObserver.observe(imgEl);
-  }
+  applyGridTo(imgEl, url) { imgEl.dataset.src = url; imgGridObserver.observe(imgEl); }
 };
 
 const imgGridObserver = new IntersectionObserver((entries) => {
@@ -620,9 +721,7 @@ const imgGridObserver = new IntersectionObserver((entries) => {
     const url = img.dataset.src;
     if (!url) return;
     imgGridObserver.unobserve(img);
-    ImgPress.compressGrid(url).then(compressed => {
-      img.src = compressed;
-    });
+    ImgPress.compressGrid(url).then(compressed => { img.src = compressed; });
   });
 }, { rootMargin: '200px' });
 
@@ -650,10 +749,7 @@ function updateGalleryCount(data) {
 
 const scrollObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      scrollObserver.unobserve(e.target);
-    }
+    if (e.isIntersecting) { e.target.classList.add('visible'); scrollObserver.unobserve(e.target); }
   });
 }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
 
@@ -673,12 +769,18 @@ function renderGallery(data) {
     const card = document.createElement('div');
     card.className = 'pcard' + (sold ? ' sold' : '');
     const soldBadge = sold ? `<div class="sold-badge">Verkauft</div>` : '';
-    const inquireBtn = !sold ? `<a class="p-inquire" onclick="event.stopPropagation();" href="https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?">Noch verfügbar?</a>` : '';
+    const inquireBtn = !sold ? `
+      <a class="p-inquire" onclick="event.stopPropagation();" href="https://wa.me/436769123266?text=Hallo%20Moritz!%20Ich%20habe%20gerade%20dein%20Werk%20%22${encodeURIComponent(title)}%22%20auf%20deiner%20Website%20gesehen.%20Ist%20es%20noch%20verf%C3%BCgbar?">Noch verfügbar?</a>
+      <span class="p-inquire-nudge">Einzelstück · antwortet meist innerhalb eines Tages</span>
+    ` : '';
     card.innerHTML = `
       <div class="p-wrapper">
         <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
         <div class="p-info">
-          <div class="p-meta"><div class="p-title">${title}</div>${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}</div>
+          <div class="p-meta">
+            <div class="p-title">${title}</div>
+            ${priceDisplay ? `<div class="p-price">${priceDisplay}</div>` : ''}
+          </div>
           <div class="p-desc">${desc}</div>
           ${inquireBtn}
         </div>
@@ -686,7 +788,6 @@ function renderGallery(data) {
     ImgPress.applyGridTo(card.querySelector('.p-img-box img'), file.download_url);
     card.onclick = () => { if (window.innerWidth <= 1024) openInfoPanel(index); else openLightboxAtIndex(index); };
     grid.appendChild(card);
-
     if (index < 4) card.style.transitionDelay = `${index * 0.1}s`;
     scrollObserver.observe(card);
   });
@@ -696,7 +797,6 @@ async function fetchPaintings() {
   try {
     const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`);
     const files = await res.json();
-
     const artistFile = files.find(f => f.name.toLowerCase() === 'artist.jpg');
     const artistImg = document.getElementById('artist-img');
     const placeholder = document.querySelector('.artist-portrait-placeholder');
@@ -705,22 +805,29 @@ async function fetchPaintings() {
       artistImg.style.display = 'block';
       if (placeholder) placeholder.style.display = 'none';
     }
-
     const loader = document.getElementById('gallery-loader');
     if (loader) loader.remove();
-
     allPaintingsData = files.filter(f => f.name.match(/\.(jpg|jpeg|png|webp)$/i) && !['artist.jpg','apple-touch-icon.png'].includes(f.name.toLowerCase()));
     renderGallery(allPaintingsData);
+    updateWorksStat();
   } catch(e) {
     const loader = document.getElementById('gallery-loader');
     if (loader) loader.innerHTML = '<div class="loader-text" style="color:var(--gold);">Galerie temporär nicht erreichbar.</div>';
   }
 }
 
+function updateWorksStat() {
+  const el = document.getElementById('works-stat');
+  if (!el || allPaintingsData.length === 0) return;
+  el.dataset.target = allPaintingsData.length;
+  // Trigger counter if already visible
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight) animateCounter(el);
+}
+
 const searchInput = document.getElementById('gallery-search');
 const searchClear = document.getElementById('search-clear');
 const searchForm = document.getElementById('search-form');
-
 if(searchInput) {
   searchInput.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase().trim();
@@ -733,7 +840,6 @@ if(searchInput) {
       }));
     }
   });
-
   if(searchClear) {
     searchClear.addEventListener('click', () => {
       searchInput.value = '';
@@ -741,13 +847,7 @@ if(searchInput) {
       searchInput.focus();
     });
   }
-
-  if(searchForm) {
-    searchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      searchInput.blur();
-    });
-  }
+  if(searchForm) { searchForm.addEventListener('submit', (e) => { e.preventDefault(); searchInput.blur(); }); }
 }
 
 function openLightboxAtIndex(index) {
@@ -779,9 +879,7 @@ const closeLightbox = () => {
 
 document.getElementById('lb-close').onclick = closeLightbox;
 document.getElementById('lb-bg').onclick = closeLightbox;
-document.querySelector('#lightbox .lb-content').onclick = function(e) {
-  if (e.target === this) closeLightbox();
-};
+document.querySelector('#lightbox .lb-content').onclick = function(e) { if (e.target === this) closeLightbox(); };
 document.getElementById('lb-prev').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex - 1); };
 document.getElementById('lb-next').onclick = (e) => { e.stopPropagation(); openLightboxAtIndex(currentPaintingIndex + 1); };
 
@@ -793,18 +891,23 @@ function openInfoPanel(index) {
   const inner = document.getElementById('info-panel-inner');
   panel.style.transform = '';
   panel.classList.remove('open');
-
-  // Inner-Scroll wieder nach oben setzen
   if (inner) inner.scrollTop = 0;
 
   ImgPress.applyTo(document.getElementById('info-img'), file.download_url);
-
   document.getElementById('info-title').textContent = title;
   document.getElementById('info-desc').textContent = desc;
+
   const priceEl = document.getElementById('info-price');
   priceEl.textContent = priceDisplay;
   priceEl.className = 'info-panel-price' + (sold ? ' sold' : '');
+
+  const uniqueEl = document.getElementById('info-unique');
+  if (uniqueEl) uniqueEl.style.display = sold ? 'none' : 'inline-flex';
+
   document.getElementById('info-sold').style.display = sold ? 'inline-block' : 'none';
+
+  const nudgeEl = document.getElementById('info-nudge');
+  if (nudgeEl) nudgeEl.style.display = sold ? 'none' : 'block';
 
   const btn = document.getElementById('info-btn');
   if (sold) {
@@ -865,17 +968,13 @@ document.getElementById('info-img-wrap').onclick = function(e) {
   }, 250);
 };
 
-/* =============================================
-   SWIPE-TO-CLOSE — prüft inner.scrollTop
-   damit natives Scrollen im Panel nicht stört
-   ============================================= */
+/* Swipe-to-close — prüft inner.scrollTop */
 (function() {
   const panel = document.getElementById('info-panel');
   const inner = document.getElementById('info-panel-inner');
   let startY = 0, currentY = 0, isDragging = false;
 
   panel.addEventListener('touchstart', e => {
-    // Nur schließen wenn der innere Scroll-Container ganz oben ist
     if (inner && inner.scrollTop > 5) return;
     startY = e.touches[0].clientY;
     isDragging = true;
@@ -886,12 +985,10 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     if (!isDragging) return;
     currentY = e.touches[0].clientY;
     let diffY = currentY - startY;
-
     if (diffY > 0) {
       panel.style.transform = `translateY(${diffY}px)`;
       const progress = Math.min(diffY / (window.innerHeight * 0.4), 1);
       document.getElementById('info-backdrop').style.opacity = 1 - (progress * 0.5);
-
       if (window.innerWidth <= 1024) {
         const wrapper = document.getElementById('main-wrapper');
         const scale = 0.93 + (progress * 0.07);
@@ -908,16 +1005,13 @@ document.getElementById('info-img-wrap').onclick = function(e) {
     if (!isDragging) return;
     isDragging = false;
     panel.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)';
-
     document.getElementById('info-backdrop').style.opacity = '';
     const wrapper = document.getElementById('main-wrapper');
     wrapper.style.transform = '';
     wrapper.style.borderRadius = '';
     wrapper.style.filter = '';
-
     const diffY = currentY - startY;
     const velocity = diffY / 250;
-
     if (diffY > 100 || velocity > 0.5) {
       closeInfoPanel();
     } else {
@@ -945,32 +1039,15 @@ document.querySelector('#artist-lightbox .lb-content').onclick = function(e) {
   const drawer = document.getElementById('nav-drawer');
   const navBar = document.getElementById('main-nav');
   if (!burger||!drawer) return;
-
-  function openNav() {
-    burger.classList.add('open');
-    drawer.classList.add('open');
-    navBar.classList.add('nav-open');
-    document.body.style.overflow='hidden';
-    document.getElementById('main-wrapper').classList.add('content-pushed');
-  }
-  function closeNav() {
-    burger.classList.remove('open');
-    drawer.classList.remove('open');
-    navBar.classList.remove('nav-open');
-    document.body.style.overflow='';
-    document.getElementById('main-wrapper').classList.remove('content-pushed');
-  }
+  function openNav() { burger.classList.add('open'); drawer.classList.add('open'); navBar.classList.add('nav-open'); document.body.style.overflow='hidden'; document.getElementById('main-wrapper').classList.add('content-pushed'); }
+  function closeNav() { burger.classList.remove('open'); drawer.classList.remove('open'); navBar.classList.remove('nav-open'); document.body.style.overflow=''; document.getElementById('main-wrapper').classList.remove('content-pushed'); }
   burger.addEventListener('click', () => drawer.classList.contains('open') ? closeNav() : openNav());
-
   document.querySelectorAll('.drawer-link').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = a.getAttribute('href');
       closeNav();
-      setTimeout(() => {
-        window.location.href = targetId;
-        history.pushState('', document.title, window.location.pathname + window.location.search);
-      }, 350);
+      setTimeout(() => { window.location.href = targetId; history.pushState('', document.title, window.location.pathname + window.location.search); }, 350);
     });
   });
 })();
@@ -993,48 +1070,31 @@ document.addEventListener('keydown', function(e) {
   const lbContent = lightbox.querySelector('.lb-content');
   const lbBg = document.getElementById('lb-bg');
   if (!lbContent || !lbBg) return;
-
   lightbox.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
-  let startX = 0, startY = 0, currentX = 0, currentY = 0, isDragging = false;
-  let startTime = 0;
-
-  lbContent.addEventListener('touchstart', e => {
-    startX = e.changedTouches[0].clientX;
-    startY = e.changedTouches[0].clientY;
-    isDragging = true;
-    startTime = Date.now();
-    lbContent.style.transition = 'none';
-    lbBg.style.transition = 'none';
-  }, { passive: true });
-
+  let startX = 0, startY = 0, currentX = 0, currentY = 0, isDragging = false, startTime = 0;
+  lbContent.addEventListener('touchstart', e => { startX = e.changedTouches[0].clientX; startY = e.changedTouches[0].clientY; isDragging = true; startTime = Date.now(); lbContent.style.transition = 'none'; lbBg.style.transition = 'none'; }, { passive: true });
   lbContent.addEventListener('touchmove', e => {
     if (!isDragging) return;
     currentX = e.changedTouches[0].clientX - startX;
     currentY = e.changedTouches[0].clientY - startY;
     const resistanceY = currentY > 0 ? currentY * 0.9 : currentY * 0.4;
     lbContent.style.transform = `translate3d(${currentX}px, ${resistanceY}px, 0) scale(${1 - Math.abs(resistanceY)*0.0003})`;
-    const fadeProgress = Math.max(0, 1 - Math.abs(currentY) / (window.innerHeight * 0.7));
-    lbBg.style.opacity = fadeProgress;
+    lbBg.style.opacity = Math.max(0, 1 - Math.abs(currentY) / (window.innerHeight * 0.7));
   }, { passive: true });
-
   lbContent.addEventListener('touchend', e => {
     if (!isDragging) return;
     isDragging = false;
     const timeElapsed = Date.now() - startTime;
     const velocityX = Math.abs(currentX) / timeElapsed;
     const velocityY = Math.abs(currentY) / timeElapsed;
-
     lbContent.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s';
     lbBg.style.transition = 'opacity 0.4s';
-
     if (currentY > 120 || (currentY > 50 && velocityY > 0.5)) {
       lbContent.style.transform = `translate3d(${currentX}px, 100vh, 0) scale(0.9)`;
       closeLightbox();
-      setTimeout(() => { resetLightboxTransform(); }, 400);
+      setTimeout(() => { lbContent.style.transform = 'translate3d(0,0,0) scale(1)'; lbContent.style.opacity = '1'; lbBg.style.opacity = '1'; currentX = 0; currentY = 0; }, 400);
       return;
     }
-
     if (Math.abs(currentX) > 80 || velocityX > 0.5) {
       const next = currentX < 0 ? currentPaintingIndex + 1 : currentPaintingIndex - 1;
       if (next >= 0 && next < displayedPaintingsData.length) {
@@ -1045,28 +1105,75 @@ document.addEventListener('keydown', function(e) {
           openLightboxAtIndex(next);
           lbContent.style.transition = 'none';
           lbContent.style.transform = `translate3d(${-direction}px, 0, 0) scale(0.95)`;
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              lbContent.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s';
-              resetLightboxTransform();
-            });
-          });
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            lbContent.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s';
+            lbContent.style.transform = 'translate3d(0,0,0) scale(1)';
+            lbContent.style.opacity = '1';
+            lbBg.style.opacity = '1';
+            currentX = 0; currentY = 0;
+          }));
         }, 200);
         return;
       }
     }
-
-    resetLightboxTransform();
-  }, { passive: true });
-
-  function resetLightboxTransform() {
-    lbContent.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    lbContent.style.transform = 'translate3d(0,0,0) scale(1)';
     lbContent.style.opacity = '1';
     lbBg.style.opacity = '1';
     currentX = 0; currentY = 0;
-  }
+  }, { passive: true });
 })();
 
+/* ==========================================
+   PARALLAX PORTRAIT (Desktop only)
+   ========================================== */
+(function() {
+  const frame = document.querySelector('.artist-portrait-frame');
+  const img = document.getElementById('artist-img');
+  if (!frame || !img) return;
+  if (!window.matchMedia('(hover: hover)').matches) return;
+
+  window.addEventListener('scroll', () => {
+    const rect = frame.getBoundingClientRect();
+    const vh = window.innerHeight;
+    if (rect.bottom < 0 || rect.top > vh) return;
+    const progress = (vh - rect.top) / (vh + rect.height);
+    const shift = (progress - 0.5) * 45;
+    img.style.transform = `scale(1.1) translateY(${shift}px)`;
+  }, { passive: true });
+})();
+
+/* ==========================================
+   ANIMATED STAT COUNTERS
+   ========================================== */
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  if (!target || isNaN(target)) return;
+  const duration = 1400;
+  const start = performance.now();
+  const tick = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.target.dataset.target) {
+      animateCounter(e.target);
+      statsObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-number[data-target]').forEach(el => statsObserver.observe(el));
+
+/* ==========================================
+   PARTICLES & INIT
+   ========================================== */
 function initParticles() {
   const cv = document.getElementById('particles-canvas');
   const ctx = cv.getContext('2d');
