@@ -144,18 +144,18 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .sold-badge { position:absolute; top:18px; left:18px; z-index:10; background:rgba(7,7,6,0.75); backdrop-filter: blur(8px); border:1px solid var(--gold); color:var(--gold); font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em; text-transform:uppercase; padding:0.35rem 0.75rem; pointer-events:none; border-radius: 4px; }
 .pcard.sold .p-img-box img { filter:grayscale(70%) brightness(0.45); opacity:1; }
 
-.p-inquire { display:inline-block; margin-top:1rem; font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); border:1px solid var(--border); padding:0.55rem 1.2rem; text-decoration:none; transition:all 0.3s cubic-bezier(0.32, 0.72, 0, 1); cursor:pointer; background:none; border-radius: 6px; }
-.p-inquire:hover { border-color:var(--gold); background:rgba(200,169,81,0.07); transform: translateY(-2px); }
+.p-inquire { display:inline-flex; align-items:center; margin-top:1.1rem; font-family:'Cinzel',serif; font-size:0.66rem; font-weight:500; letter-spacing:0.26em; text-transform:uppercase; color:var(--gold-l); border:1px solid var(--gold); padding:0.75rem 1.5rem; text-decoration:none; transition:all 0.3s cubic-bezier(0.32, 0.72, 0, 1); cursor:pointer; background:linear-gradient(135deg, rgba(200,169,81,0.18), rgba(139,105,20,0.10)); border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.35); }
+@media (hover: hover) { .p-inquire:hover { background:linear-gradient(135deg, var(--gold-l), var(--gold)); color:var(--black); transform:translateY(-2px); box-shadow:0 10px 24px rgba(200,169,81,0.28); } }
+.p-inquire:active { background:linear-gradient(135deg, var(--gold-l), var(--gold)); color:var(--black); transform:scale(0.97); }
 .pcard.sold .p-inquire { display:none; }
 
 /* Conversion Nudge unter Karten-Button */
 .p-inquire-nudge {
   display: block;
-  font-size: 0.55rem;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-  margin-top: 0.45rem;
-  opacity: 0.65;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: rgba(240,235,224,0.62);
+  margin-top: 0.7rem;
   font-style: italic;
 }
 .pcard.sold .p-inquire-nudge { display: none; }
@@ -180,6 +180,24 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
   flex-shrink: 0;
 }
 .pcard.sold .p-price { color:var(--muted); text-decoration:line-through; opacity:0.6; background: none; border-color: transparent; }
+
+/* ==========================================
+   FILTER-TABS  (Alle / Verfügbar / Verkauft)
+   ========================================== */
+.filter-tabs { display:inline-flex; gap:0.35rem; padding:0.35rem; margin:0 auto 1.8rem; background:var(--surface); border:1px solid rgba(200,169,81,0.32); border-radius:14px; box-shadow:0 12px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(232,213,163,0.06); max-width:100%; }
+.filter-tab { appearance:none; -webkit-appearance:none; border:0; outline:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0.7rem 1.5rem; border-radius:10px; background:transparent; color:rgba(240,235,224,0.78); font-family:'Cinzel',serif; font-weight:500; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; white-space:nowrap; transition:background 0.35s cubic-bezier(0.32,0.72,0,1), color 0.3s, box-shadow 0.35s, transform 0.2s; }
+@media (hover: hover) { .filter-tab:not(.active):hover { color:var(--gold-l); background:rgba(200,169,81,0.1); } }
+.filter-tab:active { transform:scale(0.96); }
+.filter-tab:focus-visible { box-shadow:0 0 0 2px var(--gold); }
+.filter-tab.active { background:linear-gradient(135deg, var(--gold-l), var(--gold) 55%, var(--gold-d)); color:var(--black); box-shadow:0 6px 18px rgba(200,169,81,0.28); }
+.ft-count { margin-left:0.6em; padding:0.12rem 0.5rem; border-radius:99px; font-size:0.58rem; letter-spacing:0.05em; background:rgba(200,169,81,0.16); color:var(--gold); transition:background 0.3s, color 0.3s; }
+.ft-count:empty { display:none; }
+.filter-tab.active .ft-count { background:rgba(7,7,6,0.2); color:var(--black); }
+@media (max-width: 480px) {
+  .filter-tabs { display:flex; width:100%; max-width:380px; gap:0.2rem; padding:0.3rem; }
+  .filter-tab { flex:1; padding:0.7rem 0.2rem; font-size:0.56rem; letter-spacing:0.1em; }
+  .ft-count { margin-left:0.4em; padding:0.1rem 0.36rem; font-size:0.52rem; }
+}
 
 /* ==========================================
    PREMIUM CORNER RIBBON
@@ -560,6 +578,11 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
         <button type="button" class="search-clear" id="search-clear" aria-label="Suche löschen">✕</button>
       </div>
     </form>
+    <div class="filter-tabs" id="filter-tabs" role="tablist" aria-label="Werke filtern">
+      <button type="button" class="filter-tab active" data-filter="all" role="tab" aria-selected="true">Alle<span class="ft-count" id="ft-all"></span></button>
+      <button type="button" class="filter-tab" data-filter="available" role="tab" aria-selected="false">Verfügbar<span class="ft-count" id="ft-available"></span></button>
+      <button type="button" class="filter-tab" data-filter="sold" role="tab" aria-selected="false">Verkauft<span class="ft-count" id="ft-sold"></span></button>
+    </div>
     <div id="gallery-count" style="font-size:0.62rem;letter-spacing:0.4em;color:var(--muted);text-transform:uppercase;font-family:'Cinzel',serif;opacity:0;transition:opacity 0.4s;margin-top:0.5rem;"></div>
   </section>
 
@@ -719,6 +742,8 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 const GITHUB_CONFIG = { owner:'flxrider8', repo:'Gallery-Moritz', path:'portfolio' };
 let allPaintingsData = [];
 let premiumNames = new Set();
+let currentFilter = 'all';   // 'all' | 'available' | 'sold'
+let currentQuery = '';
 let displayedPaintingsData = [];
 let currentPaintingIndex = -1;
 let openedFromInfoPanel = false;
@@ -792,7 +817,7 @@ function updateGalleryCount(data) {
   const countEl = document.getElementById('gallery-count');
   if (countEl) {
     if (data.length === 0) countEl.textContent = 'Keine Werke gefunden';
-    else countEl.textContent = data.length + (data.length === 1 ? ' Werk' : ' Werke') + (soldCount > 0 ? ' · ' + soldCount + ' verkauft' : '');
+    else countEl.textContent = data.length + (data.length === 1 ? ' Werk' : ' Werke') + (soldCount > 0 && currentFilter === 'all' ? ' · ' + soldCount + ' verkauft' : '');
     countEl.style.opacity = '1';
   }
 }
@@ -810,7 +835,7 @@ function renderGallery(data) {
   updateGalleryCount(data);
 
   if (data.length === 0) {
-    grid.innerHTML = '<div class="loader-text" style="grid-column:1/-1;text-align:center;">Keine Ergebnisse für deine Suche.</div>';
+    grid.innerHTML = `<div class="loader-text" style="grid-column:1/-1;text-align:center;">${currentQuery ? 'Keine Ergebnisse für deine Suche.' : 'Keine Werke in dieser Kategorie.'}</div>`;
     return;
   }
 
@@ -880,7 +905,8 @@ async function fetchPaintings() {
         .map(x => x.name)
     );
 
-    renderGallery(allPaintingsData);
+    updateFilterCounts();
+    applyFilters();
     updateWorksStat();
   } catch(e) {
     const loader = document.getElementById('gallery-loader');
@@ -896,20 +922,45 @@ function updateWorksStat() {
   statsObserver.observe(el);
 }
 
+function applyFilters() {
+  const list = allPaintingsData.filter(f => {
+    const { sold, title, desc } = parseName(f.name);
+    if (currentFilter === 'available' && sold) return false;
+    if (currentFilter === 'sold' && !sold) return false;
+    if (!currentQuery) return true;
+    return title.toLowerCase().includes(currentQuery) || desc.toLowerCase().includes(currentQuery);
+  });
+  renderGallery(list);
+}
+
+function updateFilterCounts() {
+  const total = allPaintingsData.length;
+  const sold = allPaintingsData.filter(f => parseName(f.name).sold).length;
+  const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+  set('ft-all', total); set('ft-available', total - sold); set('ft-sold', sold);
+}
+
+document.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.filter === currentFilter) return;
+    currentFilter = btn.dataset.filter;
+    document.querySelectorAll('.filter-tab').forEach(b => {
+      const on = b === btn;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    applyFilters();
+  });
+});
+
 const searchInput = document.getElementById('gallery-search');
 const searchClear = document.getElementById('search-clear');
 const searchForm = document.getElementById('search-form');
 if(searchInput) {
   searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    if(searchClear) searchClear.classList.toggle('visible', query.length > 0);
-    if(!query) renderGallery(allPaintingsData);
-    else {
-      renderGallery(allPaintingsData.filter(f => {
-        const { title, desc } = parseName(f.name);
-        return title.toLowerCase().includes(query) || desc.toLowerCase().includes(query);
-      }));
-    }
+    currentQuery = e.target.value.toLowerCase().trim();
+    if(searchClear) searchClear.classList.toggle('visible', currentQuery.length > 0);
+    applyFilters();
   });
   if(searchClear) {
     searchClear.addEventListener('click', () => {
