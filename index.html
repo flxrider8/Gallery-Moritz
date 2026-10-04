@@ -733,7 +733,8 @@ function parseName(filename) {
   let price = '', title = base, desc = '';
   if (parts.length === 3) { price = parts[0].trim(); desc = parts[1].trim(); title = parts[2].trim(); }
   else if (parts.length === 2) { price = parts[0].trim(); title = parts[1].trim(); }
-  const priceDisplay = price ? (price.includes('€') || price.toLowerCase().includes('euro') ? price : price + ' €') : '';
+  const hasNumber = /\d/.test(price);
+  const priceDisplay = price ? (!hasNumber || price.includes('€') || price.toLowerCase().includes('euro') ? price : price + ' €') : '';
   return { sold, price, title, desc, priceDisplay };
 }
 
