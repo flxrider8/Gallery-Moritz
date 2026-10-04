@@ -182,6 +182,48 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 .pcard.sold .p-price { color:var(--muted); text-decoration:line-through; opacity:0.6; background: none; border-color: transparent; }
 
 /* ==========================================
+   PREMIUM CORNER RIBBON
+   (Basis: Uiverse.io by mrhyddenn, auf Gold-Look angepasst)
+   Original-Orange: --rb-bg: linear-gradient(45deg,#ff6547 0%,#ffb144 51%,#ff7053 100%);
+                    --rb-fold: #cc3f47; --rb-text: #fff;
+   ========================================== */
+.premium-ribbon {
+  --rb-bg: linear-gradient(45deg, #0b0a08 0%, #1c1a16 50%, #0b0a08 100%);
+  --rb-text: var(--gold-l);
+  --rb-line: var(--gold);
+  --rb-fold: var(--gold-d);
+  position: absolute; top: -8px; left: -8px;
+  width: 120px; height: 120px;
+  overflow: hidden; pointer-events: none; z-index: 6;
+  display: flex; align-items: center; justify-content: center;
+}
+.premium-ribbon::before {
+  content: attr(data-label);
+  position: absolute; width: 150%; height: 32px;
+  background-image: linear-gradient(105deg, transparent 40%, rgba(232,213,163,0.28) 50%, transparent 60%), var(--rb-bg);
+  background-size: 250% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: ribbonSheen 5s ease-in-out infinite;
+  border-top: 1px solid var(--rb-line); border-bottom: 1px solid var(--rb-line);
+  transform: rotate(-45deg) translateY(-16px);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--rb-text);
+  font-family: 'Cinzel', serif; font-weight: 500; font-size: 0.5rem;
+  letter-spacing: 0.34em; padding-left: 0.34em; text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(200,169,81,0.45);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+.premium-ribbon::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 8px; height: 8px; z-index: -1;
+  background: var(--rb-fold);
+  box-shadow: 112px -112px var(--rb-fold);
+}
+@keyframes ribbonSheen { 0%, 55% { background-position: 180% 0, 0 0; } 100% { background-position: -80% 0, 0 0; } }
+@media (prefers-reduced-motion: reduce) { .premium-ribbon::before { animation: none; } }
+@media (max-width: 600px) { .premium-ribbon { transform: scale(0.85); transform-origin: top left; } }
+
+/* ==========================================
    ARTIST / ABOUT SECTION
    ========================================== */
 .artist-sec { padding:5rem 2rem 7rem; max-width:1100px; margin:0 auto; }
@@ -676,6 +718,7 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 <script>
 const GITHUB_CONFIG = { owner:'flxrider8', repo:'Gallery-Moritz', path:'portfolio' };
 let allPaintingsData = [];
+let premiumNames = new Set();
 let displayedPaintingsData = [];
 let currentPaintingIndex = -1;
 let openedFromInfoPanel = false;
@@ -724,6 +767,12 @@ const imgGridObserver = new IntersectionObserver((entries) => {
     ImgPress.compressGrid(url).then(compressed => { img.src = compressed; });
   });
 }, { rootMargin: '200px' });
+
+function priceToNumber(str) {
+  const t = String(str || '').replace(/[^\d.,]/g, '');
+  if (!/\d/.test(t)) return NaN;
+  return parseFloat(t.replace(/\./g, '').replace(',', '.'));
+}
 
 function parseName(filename) {
   let base = filename.replace(/\.[^/.]+$/, '');
@@ -777,6 +826,7 @@ function renderGallery(data) {
     card.innerHTML = `
       <div class="p-wrapper">
         <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
+        ${premiumNames.has(file.name) ? '<span class="premium-ribbon" data-label="Premium"></span>' : ''}
         <div class="p-info">
           <div class="p-meta">
             <div class="p-title">${title}</div>
@@ -809,6 +859,27 @@ async function fetchPaintings() {
     const loader = document.getElementById('gallery-loader');
     if (loader) loader.remove();
     allPaintingsData = files.filter(f => f.name.match(/\.(jpg|jpeg|png|webp)$/i) && !['artist.jpg','apple-touch-icon.png'].includes(f.name.toLowerCase()));
+
+    // Neueste zuerst: Upload-Datum aus portfolio/_dates.json (erzeugt von der GitHub Action).
+    // Bilder ohne Eintrag (frisch hochgeladen, Action läuft noch) landen ganz oben.
+    let dates = {};
+    const datesFile = files.find(f => f.name === '_dates.json');
+    if (datesFile) {
+      try { dates = await (await fetch(datesFile.download_url)).json(); } catch(e) { dates = {}; }
+    }
+    const ts = f => dates[f.name] ? Date.parse(dates[f.name]) : Infinity;
+    allPaintingsData.sort((a, b) => { const ta = ts(a), tb = ts(b); return ta === tb ? 0 : (tb > ta ? 1 : -1); });
+
+    // Premium-Ribbon: die 5 teuersten Bilder, die noch erhältlich sind
+    premiumNames = new Set(
+      allPaintingsData
+        .map(f => { const p = parseName(f.name); return { name: f.name, sold: p.sold, value: priceToNumber(p.price) }; })
+        .filter(x => !x.sold && !isNaN(x.value))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5)
+        .map(x => x.name)
+    );
+
     renderGallery(allPaintingsData);
     updateWorksStat();
   } catch(e) {
