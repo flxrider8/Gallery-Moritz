@@ -139,7 +139,40 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 @media (hover: hover) { .p-wrapper:hover .p-img-box img { transform:scale(1.045); } }
 .p-spot { position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity 0.25s; z-index:1; background:radial-gradient(circle 200px at 50% 50%,rgba(255,255,200,0.14),transparent 70%); }
 .p-wrapper:hover .p-spot { opacity:1; }
-.p-img-box { border:14px solid var(--gold); outline:1px solid rgba(200,169,81,0.3); outline-offset:4px; box-shadow:inset 0 0 0 2px var(--gold-d),inset 0 0 0 3px var(--gold),inset 0 0 0 5px var(--gold-d),0 35px 60px rgba(0,0,0,0.6),0 0 30px rgba(200,169,81,0.05); }
+/* ==========================================
+   BILDRAHMEN: Passepartout + feine Gold-Kante + wandernder Lichtstrahl beim Hover
+   (Effekt-Basis: Uiverse.io by ElSombrero2, auf Gold-Look angepasst)
+   ========================================== */
+.p-frame { position:relative; z-index:0; overflow:hidden; padding:2px; border-radius:12px; background:linear-gradient(145deg, rgba(232,213,163,0.55), rgba(139,105,20,0.30) 45%, rgba(200,169,81,0.45)); box-shadow:0 30px 55px rgba(0,0,0,0.6), 0 8px 18px rgba(0,0,0,0.4); transition:box-shadow 0.5s ease; }
+.p-frame > .p-img-box { position:relative; z-index:1; border:10px solid var(--dark); border-radius:10px; background:var(--dark); }
+.p-frame::before { content:''; position:absolute; top:50%; left:50%; width:150%; aspect-ratio:1; z-index:0; opacity:0; pointer-events:none;
+  transform:translate(-50%,-50%) rotate(0deg);
+  background:conic-gradient(from 0deg, transparent 0deg 85deg, var(--gold-d) 125deg, var(--gold) 165deg, #fff3cf 180deg, transparent 180deg 265deg, var(--gold-d) 305deg, var(--gold) 345deg, #fff3cf 360deg);
+  animation:frameBeam 5s linear infinite; animation-play-state:paused; transition:opacity 0.4s; }
+.p-frame::after { content:''; position:absolute; inset:0; z-index:0; opacity:0; pointer-events:none; background:rgba(14,13,11,0.18); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); transition:opacity 0.4s; }
+@keyframes frameBeam { to { transform:translate(-50%,-50%) rotate(360deg); } }
+@media (hover: hover) {
+  .p-wrapper:hover .p-frame { box-shadow:0 38px 70px rgba(0,0,0,0.65), 0 0 40px rgba(200,169,81,0.16); }
+  .p-wrapper:hover .p-frame::before, .p-wrapper:hover .p-frame::after { opacity:1; }
+  .p-wrapper:hover .p-frame::before { animation-play-state:running; }
+}
+@media (hover: none) {
+  .p-wrapper:active .p-frame::before, .p-wrapper:active .p-frame::after { opacity:1; }
+  .p-wrapper:active .p-frame::before { animation-play-state:running; }
+}
+@media (prefers-reduced-motion: reduce) { .p-frame::before, .p-frame::after { display:none; } }
+
+/* ==========================================
+   SCROLL-PROGRESS (oberer Bildschirmrand)
+   ========================================== */
+.scroll-progress { position:fixed; top:0; left:0; right:0; height:3px; z-index:250; pointer-events:none; opacity:0; transition:opacity 0.4s; }
+.scroll-progress.on { opacity:1; }
+.scroll-progress-bar { position:absolute; inset:0; transform:translate3d(-100%,0,0); will-change:transform;
+  background:linear-gradient(90deg, var(--gold-d), var(--gold), var(--gold-l), var(--gold), var(--gold-d)); background-size:320px 100%; background-repeat:repeat-x;
+  box-shadow:0 0 10px rgba(200,169,81,0.7), 0 0 24px rgba(200,169,81,0.3); animation:progressShine 3s linear infinite; }
+.scroll-progress-bar::after { content:''; position:absolute; top:50%; right:0; width:80px; height:7px; transform:translateY(-50%); background:radial-gradient(closest-side, rgba(255,243,207,0.95), rgba(232,213,163,0.35) 55%, transparent); }
+@keyframes progressShine { to { background-position-x:320px; } }
+@media (prefers-reduced-motion: reduce) { .scroll-progress-bar { animation:none; } }
 
 .sold-badge { position:absolute; top:18px; left:18px; z-index:10; background:rgba(7,7,6,0.75); backdrop-filter: blur(8px); border:1px solid var(--gold); color:var(--gold); font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em; text-transform:uppercase; padding:0.35rem 0.75rem; pointer-events:none; border-radius: 4px; }
 .pcard.sold .p-img-box img { filter:grayscale(70%) brightness(0.45); opacity:1; }
@@ -453,7 +486,8 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 /* MOBILE */
 @media(max-width:768px) {
   .gallery-grid { gap:3.5rem !important; grid-template-columns: 1fr; }
-  .p-img-box { border-width:8px !important; border-radius: 2px; }
+  .p-frame { border-radius:10px; }
+  .p-frame > .p-img-box { border-width:7px; border-radius:8px; }
   .p-title { font-size:1.2rem !important; }
   .lb-arrow { display:none; }
   nav { padding:1.2rem 1.5rem; padding-top:calc(env(safe-area-inset-top,0px) + 1.2rem); background:#070706; border-bottom:none; }
@@ -529,6 +563,8 @@ nav.nav-open { background: transparent !important; border-bottom: none !importan
 <script defer src="https://cloud.umami.is/script.js" data-website-id="2bff960a-0c1b-40a1-9c35-68f504b74e3a"></script>
 </head>
 <body>
+
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
 
 <nav id="main-nav">
   <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>{history.pushState('',document.title,window.location.pathname+window.location.search);},400);">ATELIER</div>
@@ -850,7 +886,7 @@ function renderGallery(data) {
     ` : '';
     card.innerHTML = `
       <div class="p-wrapper">
-        <div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div>
+        <div class="p-frame"><div class="p-img-box">${soldBadge}<img src="" data-src="${file.download_url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('img-loaded');"><div class="p-spot"></div></div></div>
         ${premiumNames.has(file.name) ? '<span class="premium-ribbon" data-label="Premium"></span>' : ''}
         <div class="p-info">
           <div class="p-meta">
@@ -1316,6 +1352,31 @@ updateNav();
 document.getElementById('year-now').textContent = new Date().getFullYear();
 initParticles();
 fetchPaintings();
+
+// ===== Scroll-Progress oben am Bildschirmrand (weich nachlaufend) =====
+(function(){
+  const wrap = document.getElementById('scroll-progress');
+  const bar  = document.getElementById('scroll-progress-bar');
+  if (!wrap || !bar) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let target = 0, current = 0, raf = 0;
+  function tick() {
+    current = reduce ? target : current + (target - current) * 0.14;
+    if (Math.abs(target - current) < 0.0004) current = target;
+    bar.style.transform = 'translate3d(' + ((current - 1) * 100) + '%,0,0)';
+    raf = current !== target ? requestAnimationFrame(tick) : 0;
+  }
+  function read() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    target = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    wrap.classList.toggle('on', window.scrollY > 4);
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  window.addEventListener('scroll', read, { passive: true });
+  window.addEventListener('resize', read);
+  if ('ResizeObserver' in window) new ResizeObserver(read).observe(document.body);
+  read();
+})();
 </script>
 </body>
 </html>
